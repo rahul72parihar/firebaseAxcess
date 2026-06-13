@@ -1,6 +1,10 @@
 import "./Home.css";
+import { useEffect, useState } from "react";
+import AuthModal from "../components/AuthModal.jsx";
+
 import girlImg from "../assets/girl.png";
 import musicImg from "../assets/musicicon.png";
+
 
 const plans = [
   { mins: 3, price: 149, popular: true },
@@ -9,7 +13,25 @@ const plans = [
 ];
 
 export default function Home() {
+  const [authOpen, setAuthOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      const raw = sessionStorage.getItem("axcess_auth");
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw);
+        setLoggedIn(Boolean(parsed?.uid));
+      } catch {
+        // ignore
+      }
+    });
+  }, []);
+
+
   return (
+
     <div className="ax-page">
       <div className="container">
         <header className="navbar">
@@ -19,7 +41,23 @@ export default function Home() {
 
           <div className="nav-right">
             <div className="secure">🛡️ Secure Payment</div>
-            <button className="login-btn">👤 Login / Signup</button>
+            {loggedIn ? (
+              <button
+                className="login-btn"
+                onClick={() => {
+                  sessionStorage.removeItem("axcess_auth");
+                  setLoggedIn(false);
+                }}
+              >
+                👤 Logout
+              </button>
+            ) : (
+              <button className="login-btn" onClick={() => setAuthOpen(true)}>
+                👤 Login / Signup
+              </button>
+            )}
+
+
           </div>
         </header>
 
@@ -48,7 +86,10 @@ export default function Home() {
           </div>
         </section>
 
+        <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} onLoggedIn={() => setLoggedIn(true)} />
+
         <section className="card minutes-card">
+
           <div>
             <h2>Minutes Available</h2>
             <div className="minutes-row">
