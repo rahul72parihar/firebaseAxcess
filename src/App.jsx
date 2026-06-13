@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home.jsx";
-import CallPage from "./pages/CallPage.jsx";
+import Callpage from "./pages/Callpage.jsx";
 import QueuePage from "./pages/QueuePage.jsx";
 import "./App.css";
 

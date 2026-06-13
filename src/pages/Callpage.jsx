@@ -1,6 +1,6 @@
-import "./CallPage.css";
+import "./Callpage.css";
 
-export default function CallPage() {
+export default function Callpage() {
   return (
     <div className="call-page">
       <div className="call-container">
