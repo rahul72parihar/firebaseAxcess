@@ -100,7 +100,8 @@ export default function Callpage() {
           </div>
 
           <div className="control">
-            <button className="circle-btn end">
+            <button className="circle-btn end"
+            onClick={()=>navigate("/")}>
               <TbPhoneOff size={26} />
             </button>
             <span>End Call</span>
