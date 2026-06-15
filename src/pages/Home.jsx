@@ -15,14 +15,18 @@ import {
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { IoHeart } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+
 
 const plans = [
   { mins: 3, price: 149 },
-  { mins: 5, price: 229 ,popular: true},
+  { mins: 5, price: 229, popular: true },
   { mins: 10, price: 399 },
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const [authOpen, setAuthOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(plans[1]);
@@ -46,11 +50,7 @@ export default function Home() {
         {/* Navbar */}
         <header className="navbar">
           <div className="logo">
-            <img
-              src={musicImg}
-              alt="Axcess"
-              className="logo-icon"
-            />
+            <img src={musicImg} alt="Axcess" className="logo-icon" />
             <span>Axcess</span>
           </div>
 
@@ -72,10 +72,7 @@ export default function Home() {
                 Logout
               </button>
             ) : (
-              <button
-                className="login-btn"
-                onClick={() => setAuthOpen(true)}
-              >
+              <button className="login-btn" onClick={() => setAuthOpen(true)}>
                 <TbUser size={18} />
                 Login / Signup
               </button>
@@ -132,11 +129,7 @@ export default function Home() {
               <p>8.7K followers</p>
             </div>
 
-            <img
-              src={girlImg}
-              alt="Aisha"
-              className="hero-image"
-            />
+            <img src={girlImg} alt="Aisha" className="hero-image" />
           </div>
         </section>
 
@@ -162,9 +155,7 @@ export default function Home() {
           </div>
 
           <div>
-            <div className="session">
-              Total Session: 90 min
-            </div>
+            <div className="session">Total Session: 90 min</div>
 
             <div className="progress">
               <div className="progress-fill"></div>
@@ -187,16 +178,10 @@ export default function Home() {
                 key={plan.mins}
                 onClick={() => setSelectedPlan(plan)}
                 className={`plan ${
-                  selectedPlan.mins === plan.mins
-                    ? "active"
-                    : ""
+                  selectedPlan.mins === plan.mins ? "active" : ""
                 }`}
               >
-                {plan.popular && (
-                  <div className="popular">
-                    Most Popular
-                  </div>
-                )}
+                {plan.popular && <div className="popular">Most Popular</div>}
 
                 <h3>{plan.mins}</h3>
                 <p>Minutes</p>
@@ -205,16 +190,14 @@ export default function Home() {
 
                 <div
                   className={`radio ${
-                    selectedPlan.mins === plan.mins
-                      ? "radio-active"
-                      : ""
+                    selectedPlan.mins === plan.mins ? "radio-active" : ""
                   }`}
                 />
               </div>
             ))}
           </div>
 
-          <button className="pay-btn">
+          <button className="pay-btn" onClick={() => navigate("/queue")}>
             Pay ₹{selectedPlan.price} & Join Queue
           </button>
 

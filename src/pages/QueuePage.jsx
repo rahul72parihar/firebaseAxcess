@@ -6,8 +6,9 @@ import { BsStars, BsExclamationTriangle, BsInfoCircle, BsCameraVideo } from "rea
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { TbShieldCheck, TbUsers, TbVideoOff } from "react-icons/tb";
-
+import {useNavigate} from "react-router-dom";
 export default function QueuePage() {
+  const navigate = useNavigate();
   return (
     <div className="queue-page">
       <div className="queue-container">
@@ -86,7 +87,7 @@ export default function QueuePage() {
                 </div>
               </div>
 
-              <button className="join-btn">
+              <button className="join-btn" onClick={() => navigate("/call")}>
                 <FiPhone size={16} />
                 Join Call
               </button>
