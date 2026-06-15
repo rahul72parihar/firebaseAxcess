@@ -1,37 +1,109 @@
-* {
+/* =========================================================
+   RESET
+   ========================================================= */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+* {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* old IE/Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Edge (Chromium) */
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
   font-family: Inter, sans-serif;
   background: #fafafa;
   font-size: 14px;
+  line-height: 1.3;
   color: #111;
+  overflow-x: hidden;
 }
 
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* =========================================================
+   THEME / FLUID SIZING TOKENS
+   clamp() values scale between phone (~360px) and laptop
+   (~1440px) so a separate tablet breakpoint isn't needed.
+   Gaps that mainly affect VERTICAL space use vh so they
+   also shrink on short screens (landscape phones, small
+   laptops), keeping everything on one screen.
+   ========================================================= */
+:root {
+  --primary: #4b30e3;
+  --primary-soft: #f3effb;
+  --primary-soft-2: #f8f5ff;
+  --primary-grad: linear-gradient(90deg, #4b30e3, #4825ff);
+  --text-muted: #666;
+  --border: #ececec;
+  --danger: #ff3b30;
+
+  --gap-xs: clamp(4px, 0.8vh, 8px);
+  --gap-sm: clamp(6px, 1vh, 14px);
+  --gap-md: clamp(8px, 1.4vh, 18px);
+  --gap-lg: clamp(10px, 2vh, 24px);
+
+  --radius-lg: clamp(14px, 2vw, 24px);
+  --radius-md: clamp(10px, 1.5vw, 18px);
+}
+
+/* =========================================================
+   PAGE LAYOUT
+   .ax-page is locked to the viewport height. .container is
+   the only scroll boundary, and only kicks in if content
+   genuinely can't be compressed further (rare edge cases) -
+   that's the "minimum scrolling" fallback.
+   ========================================================= */
 .ax-page {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* falls back to 100vh on older browsers */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
+  width: 100%;
   max-width: 1200px;
-  margin: auto;
-  padding: 24px;
+  margin: 0 auto;
+  padding: var(--gap-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
-/* NAVBAR */
-
+/* =========================================================
+   NAVBAR
+   ========================================================= */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  gap: var(--gap-sm);
+  flex-shrink: 0;
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: clamp(1.15rem, 2.2vw, 2rem);
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -39,10 +111,16 @@ body {
   color: #111;
 }
 
+.logo-icon {
+  width: clamp(26px, 3vw, 42px);
+  height: clamp(26px, 3vw, 42px);
+  object-fit: contain;
+}
+
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: var(--gap-sm);
 }
 
 .secure {
@@ -51,85 +129,93 @@ body {
   gap: 8px;
   color: #555;
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .login-btn {
-  border: 2px solid #4b30e3;
+  border: 2px solid var(--primary);
   background: #fff;
-  color: #4b30e3;
-  padding: 12px 18px;
+  color: var(--primary);
+  padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 18px);
   border-radius: 14px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: clamp(0.78rem, 0.9vw, 0.9rem);
   cursor: pointer;
-
   display: flex;
   align-items: center;
   gap: 8px;
-
   transition: 0.2s ease;
+  white-space: nowrap;
 }
 
 .login-btn:hover {
-  background: #4b30e3;
+  background: var(--primary);
   color: #fff;
 }
 
-/* HERO */
-
+/* =========================================================
+   HERO
+   ========================================================= */
 .hero-card {
-  background: #f3effb;
-  border-radius: 28px;
+  background: var(--primary-soft);
+  border-radius: var(--radius-lg);
   display: grid;
-  grid-template-columns: 1fr 430px;
+  grid-template-columns: 1fr clamp(220px, 30vw, 380px);
   overflow: hidden;
-  margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .hero-content {
-  padding: 40px;
+  padding: var(--gap-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--gap-xs);
 }
 
 .live-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-
   background: #fff;
-  padding: 8px 14px;
+  padding: 4px 12px;
   border-radius: 999px;
-
-  color: #ff3b30;
+  color: var(--danger);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+  width: fit-content;
 }
 
 .live-dot {
   width: 8px;
   height: 8px;
-  background: #ff3b30;
+  background: var(--danger);
   border-radius: 50%;
 }
 
 .hero-content h1 {
-  font-size: 52px;
-  line-height: 1.05;
-  margin: 24px 0;
+  font-size: clamp(22px, 4vw, 48px);
+  line-height: 1.08;
 }
 
 .hero-content h1 span {
-  color: #4b30e3;
+  color: var(--primary);
 }
 
 .hero-content p {
-  font-size: 18px;
+  font-size: clamp(12px, 1.1vw, 17px);
   color: #555;
+  /* clamp to a single line so it never pushes height */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
 }
 
 .hero-meta {
   display: flex;
-  gap: 40px;
-  margin-top: 32px;
+  flex-wrap: wrap;
+  gap: clamp(12px, 3vw, 40px);
 }
 
 .hero-meta div {
@@ -138,11 +224,12 @@ body {
 }
 
 .hero-meta strong {
-  font-size: 1rem;
+  font-size: clamp(0.78rem, 1vw, 1rem);
 }
 
 .hero-meta span {
-  color: #666;
+  color: var(--text-muted);
+  font-size: clamp(0.68rem, 0.9vw, 0.85rem);
 }
 
 .hero-image-wrap {
@@ -152,76 +239,93 @@ body {
 .hero-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-height: 290px;
+  object-fit: contain;
 }
 
 .profile-card {
   position: absolute;
-  right: 20px;
-  top: 30px;
-
+  right: 10px;
+  top: 10px;
   background: #fff;
-  padding: 14px;
-  border-radius: 16px;
-
+  padding: clamp(6px, 0.8vw, 14px);
+  border-radius: 12px;
   z-index: 2;
-  font-size: 0.9rem;
-
+  font-size: 0.85rem;
+  max-width: 150px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
-
+.insta-icon-homepage{
+  height: 20px;
+  margin-right: 5px;
+}
 .profile-card h3 {
   display: flex;
   align-items: center;
+  gap: 4px;
+  font-size: clamp(0.72rem, 1vw, 1rem);
 }
 
 .profile-card p {
-  margin-top: 6px;
-  color: #666;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: clamp(0.62rem, 0.9vw, 0.85rem);
 }
 
 .verified {
   color: #3b82f6;
 }
 
-/* CARDS */
-
+/* =========================================================
+   SHARED CARD STYLE
+   ========================================================= */
 .card {
+  text-align: center;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
   background: #fff;
-  border: 1px solid #ececec;
-  border-radius: 24px;
-  padding: 32px;
-  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--gap-lg);
+  flex-shrink: 0;
 }
 
 .card h2 {
-  margin-bottom: 8px;
+  font-size: clamp(0.95rem, 1.6vw, 1.4rem);
+  line-height: 1.2;
+  align-self: left;
+  margin-bottom: 20px;
 }
 
-/* MINUTES */
-
+/* =========================================================
+   MINUTES CARD
+   Stays a two-column row at every width (never stacks) so
+   it doesn't add extra height on phones.
+   ========================================================= */
 .minutes-card {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 40px;
+  grid-template-columns: clamp(110px, 25vw, 300px) 1fr;
+  gap: var(--gap-lg);
+  align-items: center;
 }
 
 .minutes-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: var(--gap-sm);
 }
 
 .big-number {
-  font-size: 64px;
-  color: #4b30e3;
+  font-size: 50px;
+  color: var(--primary);
   font-weight: 800;
+  line-height: 1;
 }
 
 .min-left {
   font-weight: 700;
+  font-size: clamp(0.75rem, 1vw, 1rem);
 }
 
 .session {
@@ -229,44 +333,51 @@ body {
 }
 
 .progress {
-  height: 14px;
+  height: clamp(6px, 0.8vh, 14px);
   background: #ece9f7;
   border-radius: 999px;
-  margin: 20px 0;
+  margin: clamp(6px, 1vh, 20px) 0;
   overflow: hidden;
 }
 
 .progress-fill {
   width: 60%;
   height: 100%;
-  background: #4b30e3;
+  background: var(--primary);
   border-radius: 999px;
 }
 
 .progress-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 0.9vw, 0.9rem);
 }
 
 .progress-labels span:last-child {
-  color: #4b30e3;
+  color: var(--primary);
   font-weight: 700;
 }
+.progress-labels span {
+  font-size: 16px;
+}
 
-/* PLANS */
-
+/* =========================================================
+   PLANS
+   Stays a 3-column grid at every width on purpose: stacking
+   into 3 separate cards on phone would roughly triple the
+   section height and force scrolling.
+   ========================================================= */
 .plans {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin: 30px 0;
+  gap: var(--gap-sm);
+  margin: var(--gap-md) 0;
 }
 
 .plan {
   border: 1px solid #eee;
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: var(--radius-md);
+  padding: clamp(8px, 1.6vh, 26px) clamp(6px, 1.2vw, 20px);
   text-align: center;
   position: relative;
   cursor: pointer;
@@ -278,66 +389,76 @@ body {
 }
 
 .plan.active {
-  border: 2px solid #4b30e3;
-  background: #f8f5ff;
+  border: 2px solid var(--primary);
+  background: var(--primary-soft-2);
 }
 
 .popular {
   position: absolute;
-  top: -14px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
-
-  background: #4b30e3;
+  background: var(--primary);
   color: #fff;
-
-  padding: 6px 16px;
+  padding: 2px 10px;
   border-radius: 999px;
-
-  font-size: 0.8rem;
+  font-size: clamp(0.58rem, 0.8vw, 0.8rem);
   font-weight: 600;
+  white-space: nowrap;
 }
 
+.small-minutes{
+  font-size: 20px ;
+  font-weight: 400;
+}
 .plan h3 {
-  font-size: 42px;
+  line-height: 1.1;
+  font-size: 27px;
+  font-weight: 400px;
 }
 
 .plan h4 {
-  font-size: 30px;
-  margin-top: 12px;
+  font-size: 22px;
+  font-weight: 400px;
+  margin-top: clamp(2px, 0.8vh, 12px);
 }
 
 .radio {
-  width: 24px;
-  height: 24px;
-
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  border: 3px solid #4b30e3;
-
-  margin: 20px auto 0;
+  border: 3px solid var(--primary);
+  margin: clamp(6px, 1.2vh, 20px) auto 0;
+  position: relative;
 }
 
-/* BUTTON */
+.radio-active::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  background: var(--primary);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
+/* =========================================================
+   PAY BUTTON / PAYMENT NOTE
+   ========================================================= */
 .pay-btn {
   width: 100%;
-  padding: 18px;
-
+  max-width: 400px;
+  margin: 0 auto;
+  padding: clamp(10px, 1.6vh, 18px);
   border: none;
-  border-radius: 18px;
-
+  border-radius: 16px;
   color: #fff;
-  font-size: 1.25rem;
-  font-weight: 700;
-
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  font-weight: 600;
   cursor: pointer;
-
-  background: linear-gradient(
-    90deg,
-    #4b30e3,
-    #4825ff
-  );
-
+  background: var(--primary-grad);
   transition: 0.2s ease;
 }
 
@@ -345,554 +466,139 @@ body {
   opacity: 0.95;
 }
 
-/* PAYMENT NOTE */
-
 .payment-note {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
-
-  margin: 18px 0;
-
-  color: #666;
-  font-size: 0.9rem;
+  margin: var(--gap-sm) 0 0;
+  color: var(--text-muted);
+  font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+  text-align: center;
 }
 
-/* QUEUE */
-
+/* =========================================================
+   QUEUE CARD
+   Single row at every width.
+   ========================================================= */
 .queue-card {
   background: #f7f5fd;
-  border-radius: 18px;
-  padding: 20px;
-
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-
-  font-size: 0.95rem;
-}
-
-.queue-card strong {
+  border-radius: 16px;
+  padding: clamp(8px, 1.4vh, 22px);
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: var(--gap-sm);
 }
 
-.queue-card p {
-  margin-top: 4px;
-  color: #666;
+.queue-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.2vw, 16px);
+  flex: 1;
+  min-width: 0;
 }
 
-/* MOBILE */
+.queue-icon {
+  font-size: clamp(20px, 3vw, 42px);
+  color: var(--primary);
+  flex-shrink: 0;
+}
 
+.queue-item strong {
+  display: block;
+  font-size: clamp(0.78rem, 1.1vw, 1.1rem);
+  margin-bottom: 3px;
+}
+
+.queue-item p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(0.68rem, 0.9vw, 0.95rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queue-divider {
+  width: 1px;
+  height: 32px;
+  background: #ddd;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   PHONE OVERRIDES (â‰¤ 768px)
+   Structural changes only - sizing already handled by
+   clamp() above.
+   ========================================================= */
 @media (max-width: 768px) {
   .container {
-    padding: 12px;
-  }
-
-  .navbar {
-    align-items: stretch;
-  }
-
-  .nav-right {
-    justify-content: space-between;
+    padding: clamp(8px, 1.6vh, 14px);
+    gap: var(--gap-xs);
   }
 
   .secure {
     display: none !important;
   }
 
-  .login-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .hero-card,
-  .minutes-card {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-content {
-    padding: 24px;
-  }
-
-  .hero-content h1 {
-    font-size: 34px;
-  }
-
-  .hero-content p {
-    font-size: 15px;
-  }
-
-  .hero-meta {
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .hero-image-wrap {
-    height: 300px;
-    display: flex;
-    justify-content: center;
-  }
-  .hero-image{
-    height: 100%;
-    width: auto;
-    max-width: 320px;
-    object-fit: cover;
-    margin: 0 auto;
-
-  }
-
-  .profile-card {
-    right: 12px;
-    top: 12px;
-    padding: 12px;
-    max-width: 180px;
-  }
-
-  .big-number {
-    font-size: 52px;
-  }
-
-  .plans {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .plan {
-    padding: 20px;
-  }
-
-  .plan h3 {
-    font-size: 34px;
-  }
-
-  .plan h4 {
-    font-size: 24px;
-  }
-
-  .pay-btn {
-    font-size: 1rem;
-    padding: 16px;
-  }
-
-  .queue-card {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-  }
-}
-
-/* LOGO IMAGE */
-
-.logo-icon {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
-}
-
-/* SELECTED PLAN RADIO */
-
-.radio {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 3px solid #4b30e3;
-  margin: 20px auto 0;
-  position: relative;
-}
-
-.radio-active::after {
-  content: "";
-  width: 12px;
-  height: 12px;
-  background: #4b30e3;
-  border-radius: 50%;
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  transform: translate(-50%, -50%);
-}
-
-/* QUEUE CARD */
-
-.queue-card {
-  background: #f7f5fd;
-  border-radius: 18px;
-  padding: 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.queue-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-}
-
-.queue-icon {
-  font-size: 42px;
-  color: #4b30e3;
-  flex-shrink: 0;
-}
-
-.queue-item strong {
-  display: block;
-  font-size: 1.1rem;
-  margin-bottom: 4px;
-}
-
-.queue-item p {
-  margin: 0;
-  color: #666;
-}
-
-.queue-divider {
-  width: 1px;
-  height: 48px;
-  background: #ddd;
-  margin: 0 24px;
-}
-
-/* MOBILE FIXES */
-
-@media (max-width: 768px) {
-  .queue-card {
-    flex-direction: column;
-    gap: 18px;
-    text-align: left;
-  }
-
-  .queue-divider {
-    width: 100%;
-    height: 1px;
-    margin: 0;
-  }
-
-  .queue-item {
-    width: 100%;
-  }
-
-  .queue-icon {
-    font-size: 34px;
-  }
-}
-
-/* =========================
-   COMPACT LAYOUT
-   ========================= */
-
-.container {
-  padding: 16px;
-}
-
-/* Navbar */
-
-.navbar {
-  margin-bottom: 16px;
-}
-
-.logo {
-  font-size: 1.7rem;
-}
-
-.logo-icon {
-  width: 34px;
-  height: 34px;
-}
-
-.nav-right {
-  gap: 12px;
-}
-
-.login-btn {
-  padding: 10px 14px;
-}
-
-/* Hero */
-
-.hero-card {
-  margin-bottom: 16px;
-  grid-template-columns: 1fr 360px;
-}
-
-.hero-content {
-  padding: 24px;
-}
-
-.hero-content h1 {
-  font-size: 42px;
-  margin: 14px 0;
-}
-
-.hero-content p {
-  font-size: 16px;
-}
-
-.hero-meta {
-  margin-top: 18px;
-  gap: 24px;
-}
-
-/* Cards */
-
-.card {
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.card h2 {
-  margin-bottom: 4px;
-}
-
-/* Minutes */
-
-.minutes-card {
-  gap: 20px;
-}
-
-.big-number {
-  font-size: 52px;
-}
-
-.progress {
-  margin: 12px 0;
-  height: 10px;
-}
-
-/* Plans */
-
-.plans {
-  gap: 12px;
-  margin: 16px 0;
-}
-
-.plan {
-  padding: 18px;
-}
-
-.plan h3 {
-  font-size: 32px;
-}
-
-.plan h4 {
-  font-size: 24px;
-  margin-top: 6px;
-}
-
-.radio {
-  margin-top: 10px;
-}
-
-/* Button */
-
-.pay-btn {
-  padding: 14px;
-  font-size: 1rem;
-}
-
-.payment-note {
-  margin: 10px 0;
-}
-
-/* Queue */
-
-.queue-card {
-  padding: 14px;
-}
-
-.queue-divider {
-  margin: 0 16px;
-}
-
-.queue-icon {
-  font-size: 30px;
-}
-
-.queue-item strong {
-  font-size: 1rem;
-}
-
-.queue-item p {
-  font-size: 0.85rem;
-}
-
-/* Desktop compression */
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1280px;
-    padding: 10px 20px;
-  }
-
-  .hero-card {
-    grid-template-columns: 1fr 320px;
-  }
-
-  .hero-content {
-    padding: 20px;
-  }
-
-  .hero-content h1 {
-    font-size: 36px;
-  }
-
-  .big-number {
-    font-size: 46px;
-  }
-
-  .card {
-    padding: 18px;
-  }
-
-  .plans {
-    gap: 10px;
-  }
-
-  .plan {
-    padding: 16px;
-  }
-
-  .queue-card {
-    padding: 12px;
-  }
-}
-
-/* Mobile */
-
-@media (max-width: 768px) {
-  .container {
-    padding: 12px;
-  }
-
-  .hero-content {
-    padding: 18px;
-  }
-
-  .hero-content h1 {
-    font-size: 30px;
-  }
-
-  .hero-meta {
-    gap: 12px;
-    margin-top: 12px;
-  }
-
-  .card {
-    padding: 16px;
-  }
-
-  .plans {
-    gap: 12px;
-  }
-
-  .plan {
-    padding: 16px;
-  }
-
-  .queue-card {
-    gap: 12px;
-    padding: 14px;
-  }
-}
-
-/* =========================
-   SMALLER MOBILE HEADINGS
-   ========================= */
-
-@media (max-width: 768px) {
-
-  /* Main hero heading */
-  .hero-content h1 {
-    font-size: 26px;
-    line-height: 1.15;
-    margin: 10px 0;
-  }
-
-  /* Section headings */
-  .card h2 {
-    font-size: 18px;
-    margin-bottom: 4px;
-  }
-
-  /* Plan minute numbers */
-  .plan h3 {
-    font-size: 26px;
-  }
-
-  /* Plan prices */
-  .plan h4 {
-    font-size: 20px;
-  }
-
-  /* Minutes available number */
-  .big-number {
-    font-size: 42px;
-  }
-
-  /* Queue titles */
-  .queue-item strong {
-    font-size: 15px;
-  }
-
-  /* Logo */
-  .logo {
-    font-size: 1.4rem;
-  }
-
-  .logo-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  /* Hero text */
-  .hero-content p {
-    font-size: 14px;
-  }
-
-  /* Hero stats */
-  .hero-meta strong {
-    font-size: 14px;
-  }
-
-  .hero-meta span {
-    font-size: 12px;
-  }
-
-  /* Profile card */
-  .profile-card h3 {
-    font-size: 14px;
-  }
-
-  .profile-card p {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 768px) {
+  /* Hero: text first, very short image strip below */
   .hero-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .hero-content {
     order: 1;
+    padding: clamp(8px, 1.6vh, 16px);
   }
 
   .hero-image-wrap {
     order: 2;
-    width: 100%;
-    height: 280px;
+    width: 200px;
+  }
+  .hero-image{
+    height: 100%;
+    /* max-width: 300px; */
+    max-height: 180px;
   }
 
-  .hero-image {
-    height: 100%;
-    object-fit: cover;
+  .profile-card {
+    max-width: 110px;
+    padding: 4px 6px;
+  }
+  .profile-card p {
+    display: none;
+  }
+  .big-number{
+    font-size: 30px;
+  }
+  /* Queue: trim divider, drop secondary text */
+  .queue-divider {
+    height: 24px;
+    margin: 0 2px;
+  }
+  .card h2 {
+  font-size: 16px;
+  line-height: 1.2;
+  align-self: left;
+  margin-bottom: 20px;
+}
+.progress-labels span {
+  font-size: 12px;
+}
+  .card h3{
+    font-size: 16px;
+  }
+  .card h4{
+    font-size: 13px;
+  }
+  .queue-item p {
+    display: none;
+  }
+  .small-minutes{
+    font-size: 10px ;
+    font-weight: 400;
   }
 }
+

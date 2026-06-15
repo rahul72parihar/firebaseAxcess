@@ -186,8 +186,8 @@ body {
 
 /* ✅ join-btn styled as active purple button with icon alignment */
 .join-btn {
-  background: #5b32f3;
-  color: white;
+  background: #e7e7e7;
+  color: rgb(96, 96, 96);
   border: none;
   padding: 18px 35px;
   border-radius: 18px;
@@ -659,4 +659,8 @@ body {
   .status-item h2 {
     font-size: 1.6rem;
   }
+}
+
+.waiting-yellow{
+  color: #e1bf00 !important;
 }

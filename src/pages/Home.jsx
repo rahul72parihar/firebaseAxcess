@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AuthModal from "../components/AuthModal.jsx";
 
 import girlImg from "../assets/girl.png";
+import instaIcon from "../assets/Instagram_icon.png";
 import musicImg from "../assets/musicicon.png";
 
 import {
@@ -119,6 +120,7 @@ export default function Home() {
           <div className="hero-image-wrap">
             <div className="profile-card">
               <h3>
+              <img src={instaIcon} alt="Instagram Icon" className="insta-icon-homepage" />
                 Aisha, 20
                 <RiVerifiedBadgeFill
                   className="verified"
@@ -183,8 +185,7 @@ export default function Home() {
               >
                 {plan.popular && <div className="popular">Most Popular</div>}
 
-                <h3>{plan.mins}</h3>
-                <p>Minutes</p>
+                <h3>{plan.mins} <span className="small-minutes">minutes</span></h3>
 
                 <h4>₹{plan.price}</h4>
 

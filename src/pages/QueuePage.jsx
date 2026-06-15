@@ -56,7 +56,7 @@ export default function QueuePage() {
 
               <div className="status-item">
                 <p>Your Queue Position</p>
-                <h2>#7</h2>
+                <h2 className="waiting-yellow">#7</h2>
               </div>
 
               <div className="divider"></div>
