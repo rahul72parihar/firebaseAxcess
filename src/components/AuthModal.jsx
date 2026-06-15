@@ -62,15 +62,15 @@ export default function AuthModal({ open, onClose, onLoggedIn }) {
     if (!open) return;
 
     queueMicrotask(() => {
-  setStep("phone");
-  setPhoneNumber("");
-  setOtp("");
-  setError("");
-  setSuccessMsg("");
-  setLoading(false);
-  setAgreeTerms(false);
-  setLocked(false); // add this
-});
+      setStep("phone");
+      setPhoneNumber("");
+      setOtp("");
+      setError("");
+      setSuccessMsg("");
+      setLoading(false);
+      setAgreeTerms(false);
+      setLocked(false); // add this
+    });
   }, [open]);
 
   const canSendOtp = useMemo(() => {
@@ -95,8 +95,15 @@ export default function AuthModal({ open, onClose, onLoggedIn }) {
     }
 
     if (!verifierRef.current) {
-      setError("reCAPTCHA not ready. Please try again.");
-      return;
+      verifierRef.current = new RecaptchaVerifier(
+        auth,
+        recaptchaContainerRef.current,
+        {
+          size: "invisible",
+        },
+      );
+
+      await verifierRef.current.render();
     }
 
     try {
