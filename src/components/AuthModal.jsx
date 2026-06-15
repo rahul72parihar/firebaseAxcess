@@ -1,20 +1,11 @@
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import { RecaptchaVerifier } from "firebase/auth";
 import { auth } from "../firebase";
 
 import "./AuthModal.css";
-import {
-  cleanupOtpSession,
-  sendOtp,
-  verifyOtp,
-} from "../auth/firebaseOtp";
+import { cleanupOtpSession, sendOtp, verifyOtp } from "../auth/firebaseOtp";
 
-export default function AuthModal({
-  open,
-  onClose,
-  onLoggedIn,
-}) {
+export default function AuthModal({ open, onClose, onLoggedIn }) {
   const [mode, setMode] = useState("login");
   const [step, setStep] = useState("phone");
 
@@ -25,8 +16,8 @@ export default function AuthModal({
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const [agreeTerms, setAgreeTerms] =
-    useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [locked, setLocked] = useState(false);
 
   const recaptchaContainerRef = useRef(null);
   const verifierRef = useRef(null);
@@ -36,14 +27,13 @@ export default function AuthModal({
     if (!recaptchaContainerRef.current) return;
 
     if (!verifierRef.current) {
-      verifierRef.current =
-        new RecaptchaVerifier(
-          auth,
-          recaptchaContainerRef.current,
-          {
-            size: "invisible",
-          }
-        );
+      verifierRef.current = new RecaptchaVerifier(
+        auth,
+        recaptchaContainerRef.current,
+        {
+          size: "invisible",
+        },
+      );
     }
 
     return () => {
@@ -63,40 +53,30 @@ export default function AuthModal({
       if (e.key === "Escape") onClose?.();
     };
 
-    window.addEventListener(
-      "keydown",
-      onKeyDown
-    );
+    window.addEventListener("keydown", onKeyDown);
 
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        onKeyDown
-      );
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
 
   useEffect(() => {
     if (!open) return;
 
     queueMicrotask(() => {
-      setStep("phone");
-      setPhoneNumber("");
-      setOtp("");
-      setError("");
-      setSuccessMsg("");
-      setLoading(false);
-      setAgreeTerms(false);
-    });
+  setStep("phone");
+  setPhoneNumber("");
+  setOtp("");
+  setError("");
+  setSuccessMsg("");
+  setLoading(false);
+  setAgreeTerms(false);
+  setLocked(false); // add this
+});
   }, [open]);
 
   const canSendOtp = useMemo(() => {
-    const cleaned =
-      phoneNumber.replace(/\s+/g, "");
+    const cleaned = phoneNumber.replace(/\s+/g, "");
 
-    return (
-      cleaned.startsWith("+") &&
-      cleaned.length >= 8
-    );
+    return cleaned.startsWith("+") && cleaned.length >= 8;
   }, [phoneNumber]);
 
   async function handleSendOtp(e) {
@@ -105,20 +85,17 @@ export default function AuthModal({
     setError("");
     setSuccessMsg("");
 
-    const cleaned =
-      phoneNumber.replace(/\s+/g, "");
+    const cleaned = phoneNumber.replace(/\s+/g, "");
 
     if (!cleaned.startsWith("+")) {
       setError(
-        "Enter phone number in international format (e.g. +14155552671)"
+        "Enter phone number in international format (e.g. +14155552671)",
       );
       return;
     }
 
     if (!verifierRef.current) {
-      setError(
-        "reCAPTCHA not ready. Please try again."
-      );
+      setError("reCAPTCHA not ready. Please try again.");
       return;
     }
 
@@ -134,10 +111,7 @@ export default function AuthModal({
     } catch (err) {
       console.error(err);
 
-      setError(
-        err?.message ||
-          "Failed to send OTP"
-      );
+      setError(err?.message || "Failed to send OTP");
     } finally {
       setLoading(false);
     }
@@ -152,9 +126,7 @@ export default function AuthModal({
     try {
       setLoading(true);
 
-      const res = await verifyOtp(
-        otp.trim()
-      );
+      const res = await verifyOtp(otp.trim());
 
       const user = res?.user;
 
@@ -162,25 +134,19 @@ export default function AuthModal({
         "axcess_auth",
         JSON.stringify({
           uid: user?.uid,
-          phone:
-            user?.phoneNumber ||
-            phoneNumber,
+          phone: user?.phoneNumber || phoneNumber,
           signedInAt: Date.now(),
-        })
+        }),
       );
 
-      setSuccessMsg(
-        "Logged in successfully"
-      );
+      setSuccessMsg("Logged in successfully");
 
       onLoggedIn?.();
       onClose?.();
     } catch (err) {
       console.error(err);
 
-      setError(
-        err?.message || "Invalid OTP"
-      );
+      setError(err?.message || "Invalid OTP");
     } finally {
       setLoading(false);
     }
@@ -189,59 +155,38 @@ export default function AuthModal({
   if (!open) return null;
 
   return (
-    <div
-      className="auth-modal-overlay"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div
-        className="auth-modal"
-        onClick={(e) =>
-          e.stopPropagation()
-        }
-      >
+    <div className="auth-modal-overlay" role="dialog" aria-modal="true">
+      <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
           <div className="auth-modal-title">
-            {mode === "login"
-              ? "Welcome Back"
-              : "Create Account"}
+            {mode === "login" ? "Welcome Back" : "Create Account"}
           </div>
 
-          <button
-            className="auth-close"
-            onClick={onClose}
-            aria-label="Close"
-          >
+          <button className="auth-close" onClick={onClose} aria-label="Close">
             ✕
           </button>
         </div>
 
         {step === "phone" ? (
-          <form
-            className="auth-form"
-            onSubmit={handleSendOtp}
-          >
+          <form className="auth-form" onSubmit={handleSendOtp}>
             <div className="field">
-              <label>
-                Phone Number
-              </label>
+              <label>Phone Number</label>
 
               <input
                 value={phoneNumber}
-                onChange={(e) =>
-                  setPhoneNumber(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+
+                  if (e.target.value.trim().length > 0) {
+                    setLocked(true);
+                  }
+                }}
                 placeholder="+14155552671"
                 inputMode="tel"
                 autoComplete="tel"
               />
 
-              <div className="hint">
-                We'll send a one-time
-                password (OTP).
-              </div>
+              <div className="hint">We'll send a one-time password (OTP).</div>
             </div>
 
             {mode === "signup" && (
@@ -249,101 +194,58 @@ export default function AuthModal({
                 <input
                   type="checkbox"
                   checked={agreeTerms}
-                  onChange={(e) =>
-                    setAgreeTerms(
-                      e.target.checked
-                    )
-                  }
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
                 />
 
-                <span>
-                  I agree to the Terms
-                  of Service and Privacy
-                  Policy
-                </span>
+                <span>I agree to the Terms of Service and Privacy Policy</span>
               </label>
             )}
 
-            <div
-              ref={recaptchaContainerRef}
-              className="recaptcha"
-            />
+            <div ref={recaptchaContainerRef} className="recaptcha" />
 
-            {error && (
-              <div className="error">
-                {error}
-              </div>
-            )}
+            {error && <div className="error">{error}</div>}
 
-            {successMsg && (
-              <div className="success">
-                {successMsg}
-              </div>
-            )}
+            {successMsg && <div className="success">{successMsg}</div>}
 
             <button
               className="primary"
               type="submit"
               disabled={
-                !canSendOtp ||
-                loading ||
-                (mode ===
-                  "signup" &&
-                  !agreeTerms)
+                !canSendOtp || loading || (mode === "signup" && !agreeTerms)
               }
             >
-              {loading
-                ? "Sending..."
-                : "Send OTP"}
+              {loading ? "Sending..." : "Send OTP"}
             </button>
           </form>
         ) : (
-          <form
-            className="auth-form"
-            onSubmit={handleVerify}
-          >
+          <form className="auth-form" onSubmit={handleVerify}>
             <div className="field">
-              <label>
-                Enter OTP
-              </label>
+              <label>Enter OTP</label>
 
               <input
                 value={otp}
-                onChange={(e) =>
-                  setOtp(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setOtp(e.target.value)}
                 placeholder="123456"
                 inputMode="numeric"
                 autoComplete="one-time-code"
               />
 
-              <div className="hint">
-                OTP sent to{" "}
-                {phoneNumber}
-              </div>
+              <div className="hint">OTP sent to {phoneNumber}</div>
             </div>
 
-            {error && (
-              <div className="error">
-                {error}
-              </div>
-            )}
+            {error && <div className="error">{error}</div>}
 
             <button
               className="primary"
               type="submit"
-              disabled={
-                loading ||
-                otp.trim().length < 4
-              }
+              onClick={() => setLocked(true)}
+              disabled={loading || otp.trim().length < 4}
             >
               {loading
                 ? "Verifying..."
                 : mode === "login"
-                ? "Login"
-                : "Create Account"}
+                  ? "Login"
+                  : "Create Account"}
             </button>
 
             {/* <button
@@ -362,40 +264,35 @@ export default function AuthModal({
           </form>
         )}
 
-        <div className="auth-switch">
-          {mode === "login" ? (
-            <>
-              Don't have an account?{" "}
-              <button
-                type="button"
-                className="switch-link"
-                onClick={() =>
-                  setMode("signup")
-                }
-              >
-                Sign up
-              </button>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <button
-                type="button"
-                className="switch-link"
-                onClick={() =>
-                  setMode("login")
-                }
-              >
-                Log in
-              </button>
-            </>
-          )}
-        </div>
-
-        <div className="auth-footer-note">
-        </div>
+        {!locked && (
+          <div className="auth-switch">
+            {mode === "login" ? (
+              <>
+                Don't have an account?{" "}
+                <button
+                  type="button"
+                  className="switch-link"
+                  onClick={() => setMode("signup")}
+                >
+                  Sign up
+                </button>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  className="switch-link"
+                  onClick={() => setMode("login")}
+                >
+                  Log in
+                </button>
+              </>
+            )}
+          </div>
+        )}
+        <div className="auth-footer-note"></div>
       </div>
     </div>
   );
 }
-
