@@ -1,6 +1,6 @@
 import "./Callpage.css";
 import musicImg from "../assets/musicicon.png";
-import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { RiH3, RiVerifiedBadgeFill } from "react-icons/ri";
 import { MdSecurity } from "react-icons/md";
 import { BsExclamationTriangle } from "react-icons/bs";
 import {
@@ -37,7 +37,7 @@ export default function Callpage() {
               LIVE
             </div>
 
-            <h1>You're in a call</h1>
+            <h2>You're in a call</h2>
 
             <p>Enjoy your 1-on-1 conversation</p>
           </div>
@@ -72,10 +72,10 @@ export default function Callpage() {
               />
             </div>
 
-            <h2>
+            <h3>
               Aisha
               <RiVerifiedBadgeFill size={20} className="verified" />
-            </h2>
+            </h3>
 
             <p>8.7K followers</p>
 
