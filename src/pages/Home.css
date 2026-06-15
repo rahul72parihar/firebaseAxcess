@@ -556,11 +556,14 @@ img {
   .hero-image-wrap {
     order: 2;
     width: 200px;
+    max-height: 180px;
+    margin-top: auto;
   }
   .hero-image{
     height: 100%;
     /* max-width: 300px; */
     max-height: 180px;
+    margin-top: auto;
   }
 
   .profile-card {
