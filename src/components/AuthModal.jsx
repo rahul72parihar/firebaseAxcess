@@ -346,7 +346,7 @@ export default function AuthModal({
                 : "Create Account"}
             </button>
 
-            <button
+            {/* <button
               className="secondary"
               type="button"
               onClick={() => {
@@ -358,7 +358,7 @@ export default function AuthModal({
               disabled={loading}
             >
               Change Phone
-            </button>
+            </button> */}
           </form>
         )}
 
