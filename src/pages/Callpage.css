@@ -427,3 +427,19 @@ body {
     height: 1px;
   }
 }
+
+.active-control {
+  background: #5b32f3 !important;
+  color: white !important;
+  border: 2px solid #5b32f3;
+}
+
+.active-control:hover {
+  background: #4a25d4 !important;
+}
+
+.active-control {
+  background: #5b32f3 !important;
+  color: white !important;
+  box-shadow: 0 0 0 6px rgba(91, 50, 243, 0.15);
+}

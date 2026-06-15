@@ -10,8 +10,11 @@ import {
   TbVolume,
 } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 export default function Callpage() {
   const navigate = useNavigate();
+  const [isMuted, setIsMuted] = useState(false);
+const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   return (
     <div className="call-page">
       <div className="call-container">
@@ -93,11 +96,19 @@ export default function Callpage() {
         <section className="controls">
 
           <div className="control">
-            <button className="circle-btn">
-              <TbMicrophone size={26} />
-            </button>
-            <span>Mute</span>
-          </div>
+  <button
+    className={`circle-btn ${
+      isMuted ? "active-control" : ""
+    }`}
+    onClick={() => setIsMuted(!isMuted)}
+  >
+    <TbMicrophone size={26} />
+  </button>
+
+  <span>
+    {isMuted ? "Muted" : "Mute"}
+  </span>
+</div>
 
           <div className="control">
             <button className="circle-btn end"
@@ -108,11 +119,23 @@ export default function Callpage() {
           </div>
 
           <div className="control">
-            <button className="circle-btn">
-              <TbVolume size={26} />
-            </button>
-            <span>Speaker</span>
-          </div>
+  <button
+    className={`circle-btn ${
+      isSpeakerOn ? "active-control" : ""
+    }`}
+    onClick={() =>
+      setIsSpeakerOn(!isSpeakerOn)
+    }
+  >
+    <TbVolume size={26} />
+  </button>
+
+  <span>
+    {isSpeakerOn
+      ? "Speaker On"
+      : "Speaker"}
+  </span>
+</div>
 
         </section>
 
