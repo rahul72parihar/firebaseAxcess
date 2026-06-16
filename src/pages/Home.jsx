@@ -3,18 +3,15 @@ import { useEffect, useState } from "react";
 import AuthModal from "../components/AuthModal.jsx";
 import Header from "../components/Header.jsx";
 
-
 import girlImg from "../assets/girl.png";
 import instaIcon from "../assets/Instagram_icon.png";
 
-
 import { TbLock, TbUsersGroup, TbClockHour4 } from "react-icons/tb";
-
+import { FiClock } from "react-icons/fi";
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { IoHeart } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-
 
 const plans = [
   { mins: 3, price: 149 },
@@ -46,7 +43,6 @@ export default function Home() {
     queueMicrotask(() => setLoggedIn(Boolean(parsed?.uid)));
   }, []);
 
-
   return (
     <div className="ax-page">
       <div className="container">
@@ -62,7 +58,6 @@ export default function Home() {
           }}
           onLogin={() => setAuthOpen(true)}
         />
-
 
         {/* Hero */}
         <section className="hero-card">
@@ -103,7 +98,11 @@ export default function Home() {
           <div className="hero-image-wrap">
             <div className="profile-card">
               <h3>
-              <img src={instaIcon} alt="Instagram Icon" className="insta-icon-homepage" />
+                <img
+                  src={instaIcon}
+                  alt="Instagram Icon"
+                  className="insta-icon-homepage"
+                />
                 Aisha, 20
                 <RiVerifiedBadgeFill
                   className="verified"
@@ -141,7 +140,10 @@ export default function Home() {
 
           <div>
             <div className="session">Total Session: 90 min</div>
-
+            <div className="limited-slots-badge">
+              <FiClock size={10} />
+              <span>Limited slots available! Hurry up!</span>
+            </div>
             <div className="progress">
               <div className="progress-fill"></div>
             </div>
@@ -168,7 +170,9 @@ export default function Home() {
               >
                 {plan.popular && <div className="popular">Most Popular</div>}
 
-                <h3>{plan.mins} <span className="small-minutes">minutes</span></h3>
+                <h3>
+                  {plan.mins} <span className="small-minutes">minutes</span>
+                </h3>
 
                 <h4>₹{plan.price}</h4>
 

@@ -275,6 +275,25 @@ img {
   color: #3b82f6;
 }
 
+.limited-slots-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #e8b4b4;
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: #d65a5a;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.limited-slots-badge svg {
+  flex-shrink: 0;
+}
+
 /* =========================================================
    SHARED CARD STYLE
    ========================================================= */
@@ -538,7 +557,7 @@ img {
     /* padding: clamp(8px, 1.6vh, 14px); */
     gap: var(--gap-xs);
     /* min-height: 100vh; */
-    min-height: 100dvh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
