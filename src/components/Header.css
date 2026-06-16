@@ -1,9 +1,8 @@
 .ax-header {
   width: 100%;
   max-width: 1180px;
-  min-height: 64px;
+  /* min-height: 64px; */
 
-  margin: 0 auto;
   padding: 16px;
 
   display: flex;
@@ -218,8 +217,11 @@
   background: #f3f4f6;
   margin: 4px 0;
 }
-@media (max-width: 640px) {
+
+@media (max-width: 768px) {
   .ax-header {
-    padding: 0px;
+    padding: 10px;
   }
+
 }
+
