@@ -497,53 +497,25 @@ img {
   text-align: center;
 }
 
-/* =========================================================
-   QUEUE CARD
-   Single row at every width.
-   ========================================================= */
-.queue-card {
-  background: #f7f5fd;
-  border-radius: 16px;
-  padding: clamp(8px, 1.4vh, 22px);
+
+.turn-notification {
+  justify-content: center;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: 10px;
+  padding: 10px ;
+  margin-top: 10px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.queue-item {
-  display: flex;
-  align-items: center;
-  gap: clamp(6px, 1.2vw, 16px);
-  flex: 1;
-  min-width: 0;
-}
-
-.queue-icon {
-  font-size: clamp(20px, 3vw, 42px);
-  color: var(--primary);
-  flex-shrink: 0;
-}
-
-.queue-item strong {
-  display: block;
-  font-size: clamp(0.78rem, 1.1vw, 1.1rem);
-  margin-bottom: 3px;
-}
-
-.queue-item p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: clamp(0.68rem, 0.9vw, 0.95rem);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.queue-divider {
-  width: 1px;
-  height: 32px;
-  background: #ddd;
+.turn-notification-icon {
+  font-size: 20px;
+  color: #f59e0b;
   flex-shrink: 0;
 }
 

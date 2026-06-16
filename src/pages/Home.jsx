@@ -6,8 +6,9 @@ import Header from "../components/Header.jsx";
 import girlImg from "../assets/girl.png";
 import instaIcon from "../assets/Instagram_icon.png";
 
-import { TbLock, TbUsersGroup, TbClockHour4 } from "react-icons/tb";
+import { TbLock } from "react-icons/tb";
 import { FiClock } from "react-icons/fi";
+import { TbBellRinging } from "react-icons/tb";
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { IoHeart } from "react-icons/io5";
@@ -195,26 +196,9 @@ export default function Home() {
           </div>
 
           {/* Queue */}
-          <div className="queue-card">
-            <div className="queue-item">
-              <TbUsersGroup className="queue-icon" />
-
-              <div>
-                <strong>18 people in queue</strong>
-                <p>We will call you in order</p>
-              </div>
-            </div>
-
-            <div className="queue-divider" />
-
-            <div className="queue-item">
-              <TbClockHour4 className="queue-icon" />
-
-              <div>
-                <strong>~15 min</strong>
-                <p>Estimated wait</p>
-              </div>
-            </div>
+          <div className="turn-notification">
+            <TbBellRinging className="turn-notification-icon" />
+            <span>We'll notify you before your turn.</span>
           </div>
         </section>
       </div>
