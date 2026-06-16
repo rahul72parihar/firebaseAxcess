@@ -198,7 +198,7 @@ export default function Home() {
           {/* Queue */}
           <div className="turn-notification">
             <TbBellRinging className="turn-notification-icon" />
-            <span>We'll notify you before your turn.</span>
+            <span>Join the queue now. We'll notify you before it's your turn to connect.</span>
           </div>
         </section>
       </div>
