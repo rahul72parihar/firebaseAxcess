@@ -71,8 +71,7 @@ img {
    that's the "minimum scrolling" fallback.
    ========================================================= */
 .ax-page {
-  height: 100vh;
-  height: 100dvh; /* falls back to 100vh on older browsers */
+  min-height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -162,7 +161,6 @@ img {
   display: grid;
   grid-template-columns: 1fr clamp(220px, 30vw, 380px);
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 .hero-content {
@@ -205,11 +203,8 @@ img {
 .hero-content p {
   font-size: clamp(12px, 1.1vw, 17px);
   color: #555;
-  /* clamp to a single line so it never pushes height */
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
 }
 
 .hero-meta {
@@ -233,20 +228,23 @@ img {
 }
 
 .hero-image-wrap {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* height: 100%; */
 }
 
 .hero-image {
   width: 100%;
   height: 100%;
   max-height: 290px;
+  flex: 1;
   object-fit: contain;
 }
 
 .profile-card {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+  align-self: flex-end;
+  margin-right: 10px;
+  margin-top: 10px;
   background: #fff;
   padding: clamp(6px, 0.8vw, 14px);
   border-radius: 12px;
@@ -359,6 +357,7 @@ img {
 }
 .progress-labels span {
   font-size: 16px;
+  padding: 5px;
 }
 
 /* =========================================================
@@ -536,71 +535,95 @@ img {
   .container {
     padding: clamp(8px, 1.6vh, 14px);
     gap: var(--gap-xs);
+    /* min-height: 100vh; */
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
   }
 
   .secure {
     display: none !important;
   }
 
-  /* Hero: text first, very short image strip below */
+  /* HERO */
   .hero-card {
     display: flex;
     flex-direction: row;
+    align-items: stretch;
+    /* flex:1; */
+    min-height: 220px;
+  }
+  section{
+    flex: 0.5;
   }
 
   .hero-content {
+    flex: 1;
     order: 1;
     padding: clamp(8px, 1.6vh, 16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .hero-image-wrap {
+    /* background-color: pink; */
     order: 2;
-    width: 200px;
-    max-height: 180px;
-    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-height: 200px;
   }
-  .hero-image{
-    height: 100%;
-    /* max-width: 300px; */
-    max-height: 180px;
-    margin-top: auto;
+
+  .hero-image {
+    width: 100%;
+    object-fit: contain;
+    display: block;
+    flex: 1;
   }
 
   .profile-card {
     max-width: 110px;
     padding: 4px 6px;
   }
+
   .profile-card p {
     display: none;
   }
-  .big-number{
+
+  .big-number {
     font-size: 30px;
   }
-  /* Queue: trim divider, drop secondary text */
+
   .queue-divider {
     height: 24px;
     margin: 0 2px;
   }
+
   .card h2 {
-  font-size: 16px;
-  line-height: 1.2;
-  align-self: left;
-  margin-bottom: 20px;
-}
-.progress-labels span {
-  font-size: 12px;
-}
-  .card h3{
+    font-size: 16px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .progress-labels span {
+    font-size: 12px;
+  }
+
+  .card h3 {
     font-size: 16px;
   }
-  .card h4{
+
+  .card h4 {
     font-size: 13px;
   }
+
   .queue-item p {
     display: none;
   }
-  .small-minutes{
-    font-size: 10px ;
+
+  .small-minutes {
+    font-size: 10px;
     font-weight: 400;
   }
 }
