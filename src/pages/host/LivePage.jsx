@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Reuses the same Header you already have. Adjust the relative path below
 // if LivePage.jsx ends up in a different folder than this assumes
@@ -477,6 +478,7 @@ function SessionOverviewFooter({ overview, elapsedTime, totalDuration }) {
 /* ------------------------------------------------------------------ */
 
 export default function LivePage() {
+  const navigate = useNavigate();
   // ---------------------------------------------------------------
   // MOCK STATE — everything below should eventually be replaced by
   // real data (initial fetch + live updates via polling/websocket).
@@ -671,6 +673,7 @@ export default function LivePage() {
   const confirmEndCall = () => {
     setActiveCall(null);
     setShowEndCallModal(false);
+    navigate("/host/session-ended");
   };
 
   const cancelEndCall = () => {

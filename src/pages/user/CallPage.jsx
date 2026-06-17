@@ -25,11 +25,6 @@ export default function Callpage() {
         {/* Hero */}
         <section className="hero-section">
           <div className="hero-left">
-            <div className="live-badge">
-              <span className="live-dot" />
-              LIVE
-            </div>
-
             <h2>You're in a call</h2>
 
             <p>Enjoy your 1-on-1 conversation</p>
@@ -82,6 +77,10 @@ export default function Callpage() {
           <div className="wave wave-left"></div>
 
           <div className="avatar-wrapper">
+            <div className="live-badge">
+              <span className="live-dot" />
+              LIVE
+            </div>
             <div className="avatar-ring">
               <img
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80"
@@ -93,7 +92,11 @@ export default function Callpage() {
 
             <h3>
               Aisha
-              <RiVerifiedBadgeFill size={20} className="verified" />
+              <RiVerifiedBadgeFill
+                size={22}
+                className="verified"
+                style={{ display: "inline-block", verticalAlign: "middle", flexShrink: 0 }}
+              />
             </h3>
 
             <p>8.7K followers</p>
@@ -152,7 +155,7 @@ export default function Callpage() {
             <h3>00:13 min</h3>
           </div>
 
-          <div className="divider"></div>
+          <div className="stat-divider"></div>
 
           <div className="stat">
             <p>Time Left</p>

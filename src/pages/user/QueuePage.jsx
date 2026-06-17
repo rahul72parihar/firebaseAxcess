@@ -47,7 +47,7 @@ export default function QueuePage() {
                 <p>Estimated wait time</p>
                 <h2>
                   <MdOutlineAccessTime size={20} style={{ verticalAlign: "middle", marginRight: 4 }} />
-                  ~18 min
+                  ~18 - 22 min
                 </h2>
               </div>
 
