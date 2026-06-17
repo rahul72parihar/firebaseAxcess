@@ -14,7 +14,7 @@ import {
   FaThLarge,
   FaLock,
 } from "react-icons/fa";
-import Header from "../components/Header.jsx";
+import Header from "../../components/Header.jsx";
 import "./CreateSessionPage.css";
 
 

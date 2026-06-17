@@ -1,8 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/authSlice";
 
 import musicImg from "../assets/musicicon.png";
-import { TbShieldLock, TbUser, TbLogout, TbChevronDown } from "react-icons/tb";
+import {
+  TbShieldLock,
+  TbUser,
+  TbLogout,
+  TbChevronDown,
+  TbLayoutDashboard,
+  TbVideo,
+  TbFileText,
+  TbShieldCheck,
+  TbHelp,
+  TbHeadset,
+} from "react-icons/tb";
 import { MdSecurity } from "react-icons/md";
 
 import "./Header.css";
@@ -16,9 +29,26 @@ function AxcessLogo() {
   );
 }
 
-function UserMenu({ userName, avatarUrl, onProfile, onPrivacy, onLogout }) {
+const USER_MENU_ITEMS = [
+  { icon: TbUser, label: "Profile", href: "/profile" },
+  { icon: TbFileText, label: "Terms & Conditions", href: "/terms" },
+  { icon: TbShieldLock, label: "Privacy Policy", href: "/privacy" },
+  { icon: TbHelp, label: "Community Guidelines", href: "/guidelines" },
+];
+
+const HOST_MENU_ITEMS = [
+  { icon: TbLayoutDashboard, label: "Dashboard", href: "/host/session" },
+  { icon: TbVideo, label: "Go Live", href: "/host/live" },
+  { icon: TbFileText, label: "Host Terms", href: "/host/terms" },
+  { icon: TbHelp, label: "Host Guidelines", href: "/host/guidelines" },
+  { icon: TbShieldCheck, label: "Privacy Policy", href: "/privacy" },
+  { icon: TbHeadset, label: "Host Support", href: "/host/support" },
+];
+
+function UserMenu({ userName, avatarUrl, role, onProfile, onLogout }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -29,6 +59,7 @@ function UserMenu({ userName, avatarUrl, onProfile, onPrivacy, onLogout }) {
     function handleEscape(event) {
       if (event.key === "Escape") setOpen(false);
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
     return () => {
@@ -36,6 +67,8 @@ function UserMenu({ userName, avatarUrl, onProfile, onPrivacy, onLogout }) {
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
+
+  const menuItems = role === "host" ? HOST_MENU_ITEMS : USER_MENU_ITEMS;
 
   return (
     <div className="ax-user-menu" ref={menuRef}>
@@ -56,31 +89,28 @@ function UserMenu({ userName, avatarUrl, onProfile, onPrivacy, onLogout }) {
 
       {open && (
         <div className="ax-user-menu-dropdown" role="menu">
-          <button
-            type="button"
-            role="menuitem"
-            className="ax-user-menu-item"
-            onClick={() => {
-              setOpen(false);
-              onProfile();
-            }}
-          >
-            <TbUser size={16} />
-            Profile
-          </button>
+          {role && (
+            <div className="ax-user-menu-role-badge">
+              {role === "host" ? "Host Account" : "User Account"}
+            </div>
+          )}
 
-          <button
-            type="button"
-            role="menuitem"
-            className="ax-user-menu-item"
-            onClick={() => {
-              setOpen(false);
-              onPrivacy();
-            }}
-          >
-            <TbShieldLock size={16} />
-            Privacy
-          </button>
+          {menuItems.map(({ icon: Icon, label, href }) => (
+            <button
+              key={label}
+              type="button"
+              role="menuitem"
+              className="ax-user-menu-item"
+              onClick={() => {
+                setOpen(false);
+                if (label === "Profile") onProfile();
+                else navigate(href);
+              }}
+            >
+              <Icon size={16} />
+              {label}
+            </button>
+          ))}
 
           <div className="ax-user-menu-divider" />
 
@@ -104,26 +134,26 @@ function UserMenu({ userName, avatarUrl, onProfile, onPrivacy, onLogout }) {
 
 export default function Header({
   mode = "default", // 'default' | 'call' | 'queue' | 'create'
-  loggedIn = false,
   userName = "Rohan",
   userAvatar = "https://i.pravatar.cc/100?img=12",
   showAuthButtons = false,
-  onLogout,
   onLogin,
   onProfile,
-  onPrivacy,
   setShowEndCallModal,
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const role = useSelector((state) => state.auth.role);
 
-  const handleLogout = () =>
-    typeof onLogout === "function" ? onLogout() : navigate("/");
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
   const handleLogin = () =>
     typeof onLogin === "function" ? onLogin() : navigate("/session");
   const handleProfile = () =>
     typeof onProfile === "function" ? onProfile() : navigate("/profile");
-  const handlePrivacy = () =>
-    typeof onPrivacy === "function" ? onPrivacy() : navigate("/privacy");
 
   if (mode === "call") {
     return (
@@ -155,8 +185,8 @@ export default function Header({
           <UserMenu
             userName={userName}
             avatarUrl={userAvatar}
+            role={role}
             onProfile={handleProfile}
-            onPrivacy={handlePrivacy}
             onLogout={handleLogout}
           />
         </div>
@@ -175,8 +205,8 @@ export default function Header({
           <UserMenu
             userName={userName}
             avatarUrl={userAvatar}
+            role={role}
             onProfile={handleProfile}
-            onPrivacy={handlePrivacy}
             onLogout={handleLogout}
           />
         </div>
@@ -202,7 +232,6 @@ export default function Header({
               userName={userName}
               avatarUrl={userAvatar}
               onProfile={handleProfile}
-              onPrivacy={handlePrivacy}
               onLogout={handleLogout}
             />
           ) : (
@@ -219,3 +248,4 @@ export default function Header({
     </header>
   );
 }
+

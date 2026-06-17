@@ -1,5 +1,5 @@
 import "./Callpage.css";
-import Header from "../components/Header.jsx";
+import Header from "../../components/Header.jsx";
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 
@@ -15,11 +15,12 @@ export default function Callpage() {
   const [isMuted, setIsMuted] = useState(false);
   const [showEndCallModal, setShowEndCallModal] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
+  const [infoMessage, setInfoMessage] = useState(true);
   return (
     <div className="call-page">
       <div className="call-container">
         {/* Header */}
-        <Header mode="call" setShowEndCallModal={setShowEndCallModal}/>
+        <Header mode="call" setShowEndCallModal={setShowEndCallModal} />
 
         {/* Hero */}
         <section className="hero-section">
@@ -34,19 +35,48 @@ export default function Callpage() {
             <p>Enjoy your 1-on-1 conversation</p>
           </div>
 
-          <div className="timer-card">
-            <h3>Time Left</h3>
+          <div className="hero-right">
+            {/* Info Message */}
+            {infoMessage &&<div className="call-info-banner call-info-banner-mobile">
+              <div className="call-info-left">
+                <span className="info-icon">i</span>
 
-            <div className="timer-big">02:47</div>
+                <div>
+                  <h4>Please don't clear the page or go to background.</h4>
+                  <p>Doing so will end the call.</p>
+                </div>
+              </div>
 
-            <p>of 03:00 min</p>
+              <button className="banner-close" onClick={()=>{setInfoMessage(false)}}>✕</button>
+            </div>}
 
-            <div className="progress">
-              <div className="progress-fill"></div>
+            {/* Existing Timer Card */}
+            <div className="timer-card">
+              <h3>Time Left</h3>
+
+              <div className="timer-big">02:47</div>
+
+              <p>of 03:00 min</p>
+
+              <div className="progress">
+                <div className="progress-fill"></div>
+              </div>
             </div>
           </div>
         </section>
 
+            {infoMessage &&<div className="call-info-banner call-info-banner-desktop">
+              <div className="call-info-left">
+                <span className="info-icon">i</span>
+
+                <div>
+                  <h4>Please don't clear the page or go to background.</h4>
+                  <p>Doing so will end the call.</p>
+                </div>
+              </div>
+
+              <button className="banner-close" onClick={()=>{setInfoMessage(false)}}>✕</button>
+            </div>}
         {/* Avatar Section */}
         <section className="avatar-section">
           <div className="wave wave-left"></div>
@@ -137,7 +167,7 @@ export default function Callpage() {
       </div>
 
       {/* MODAL */}
-      
+
       {showEndCallModal && (
         <div className="modal-overlay">
           <div className="modal">

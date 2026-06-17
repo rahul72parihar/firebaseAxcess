@@ -1,5 +1,5 @@
 import "./QueuePage.css";
-import Header from "../components/Header.jsx";
+import Header from "../../components/Header.jsx";
 
 import { FiUsers, FiPhone } from "react-icons/fi";
 import { BsStars, BsExclamationTriangle, BsInfoCircle } from "react-icons/bs";

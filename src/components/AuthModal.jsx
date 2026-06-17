@@ -1,15 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { RecaptchaVerifier } from "firebase/auth";
+import { useDispatch } from "react-redux";
 import { auth } from "../firebase";
 
 import "./AuthModal.css";
 import { cleanupOtpSession, sendOtp, verifyOtp } from "../auth/firebaseOtp";
+import { loginSuccess } from "../store/authSlice";
 
-export default function AuthModal({ open, onClose, onLoggedIn }) {
+export default function AuthModal({ open, onClose }) {
+  const dispatch = useDispatch();
   const [mode, setMode] = useState("login");
   const [step, setStep] = useState("phone");
 
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("+91");
   const [otp, setOtp] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -63,7 +66,7 @@ export default function AuthModal({ open, onClose, onLoggedIn }) {
 
     queueMicrotask(() => {
       setStep("phone");
-      setPhoneNumber("");
+      setPhoneNumber("+91");
       setOtp("");
       setError("");
       setSuccessMsg("");
@@ -137,18 +140,17 @@ export default function AuthModal({ open, onClose, onLoggedIn }) {
 
       const user = res?.user;
 
+      const uid = user?.uid;
+      const phone = user?.phoneNumber || phoneNumber;
+
       sessionStorage.setItem(
         "axcess_auth",
-        JSON.stringify({
-          uid: user?.uid,
-          phone: user?.phoneNumber || phoneNumber,
-          signedInAt: Date.now(),
-        }),
+        JSON.stringify({ uid, phone, signedInAt: Date.now() }),
       );
 
-      setSuccessMsg("Logged in successfully");
+      dispatch(loginSuccess({ uid, phone }));
 
-      onLoggedIn?.();
+      setSuccessMsg("Logged in successfully");
       onClose?.();
     } catch (err) {
       console.error(err);

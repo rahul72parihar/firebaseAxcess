@@ -1,10 +1,10 @@
 import "./Home.css";
-import { useEffect, useState } from "react";
-import AuthModal from "../components/AuthModal.jsx";
-import Header from "../components/Header.jsx";
+import { useState } from "react";
+import AuthModal from "../../components/AuthModal.jsx";
+import Header from "../../components/Header.jsx";
 
-import girlImg from "../assets/girl.png";
-import instaIcon from "../assets/Instagram_icon.png";
+import girlImg from "../../assets/girl.png";
+import instaIcon from "../../assets/Instagram_icon.png";
 
 import { TbLock } from "react-icons/tb";
 import { FiClock } from "react-icons/fi";
@@ -24,25 +24,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const [authOpen, setAuthOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(plans[1]);
-
-  useEffect(() => {
-    const raw = sessionStorage.getItem("axcess_auth");
-
-    if (!raw) return;
-
-    let parsed;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      console.error("Invalid auth data");
-      return;
-    }
-
-    // Avoid setting state directly in the effect body (eslint rule)
-    queueMicrotask(() => setLoggedIn(Boolean(parsed?.uid)));
-  }, []);
 
   return (
     <div className="ax-page">
@@ -50,13 +32,7 @@ export default function Home() {
         {/* Navbar */}
         <Header
           mode="default"
-          loggedIn={loggedIn}
           showAuthButtons={true}
-          setAuthOpen
-          onLogout={() => {
-            sessionStorage.removeItem("axcess_auth");
-            setLoggedIn(false);
-          }}
           onLogin={() => setAuthOpen(true)}
         />
 
@@ -97,6 +73,8 @@ export default function Home() {
           </div>
 
           <div className="hero-image-wrap">
+            <img src={girlImg} alt="Aisha" className="hero-image" />
+
             <div className="profile-card">
               <h3>
                 <img
@@ -113,15 +91,12 @@ export default function Home() {
 
               <p>8.7K followers</p>
             </div>
-
-            <img src={girlImg} alt="Aisha" className="hero-image" />
           </div>
         </section>
 
         <AuthModal
           open={authOpen}
           onClose={() => setAuthOpen(false)}
-          onLoggedIn={() => setLoggedIn(true)}
         />
 
         {/* Minutes */}

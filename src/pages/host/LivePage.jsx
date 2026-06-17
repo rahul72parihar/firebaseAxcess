@@ -3,7 +3,7 @@ import { useState } from "react";
 // Reuses the same Header you already have. Adjust the relative path below
 // if LivePage.jsx ends up in a different folder than this assumes
 // (this assumes: src/pages/LivePage.jsx + src/components/Header.jsx).
-import Header from "../components/Header";
+import Header from "../../components/Header";
 
 import {
   TbMicrophone,
