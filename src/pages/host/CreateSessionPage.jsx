@@ -15,6 +15,8 @@ import {
 import Header from "../../components/Header.jsx";
 import "./CreateSessionPage.css";
 
+// TODO(api): fetch from GET /api/host/session-config — duration options, badges,
+// and selling points may be host-tier or campaign specific rather than fixed.
 const DURATIONS = [
   {
     id: 60,
@@ -36,7 +38,11 @@ const DURATIONS = [
   },
 ];
 
+// TODO(api): fetch available slots from GET /api/host/availability — should
+// reflect the host's real calendar/timezone instead of this fixed list.
 const START_TIMES = ["7 PM", "8 PM", "9 PM", "10 PM"];
+// TODO(api): "recommended" slot should come from the API (e.g. based on
+// audience engagement analytics) rather than being hardcoded here.
 const RECOMMENDED_TIME = "9 PM";
 
 export default function CreateSessionPage() {
@@ -44,6 +50,8 @@ export default function CreateSessionPage() {
   const [selectedDuration, setSelectedDuration] = useState(120);
   const [selectedTime, setSelectedTime] = useState("9 PM");
 
+  // TODO(api): "earning potential" is a local heuristic — replace with a real
+  // estimate from the API (e.g. GET /api/host/earning-estimate?duration=...).
   const earningPotential = selectedDuration >= 120 ? "Higher" : selectedDuration >= 90 ? "High" : "Moderate";
 
   return (
@@ -229,6 +237,10 @@ export default function CreateSessionPage() {
               <p className="axcess-footer-heading">Ready for the next step?</p>
               <p className="axcess-footer-subtext">You can share your session link and invite users to join.</p>
             </div>
+            {/* TODO(api): persist the session draft via POST /api/host/sessions
+                (duration + start time) before navigating, so it survives reloads
+                and PreLiveSetupPage/LivePage can fetch it by session id instead
+                of relying solely on router state. */}
             <button
               className="axcess-cta-btn"
               onClick={() => navigate("/host/prelive", { state: { duration: selectedDuration, time: selectedTime } })}

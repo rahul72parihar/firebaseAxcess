@@ -152,6 +152,10 @@ export default function AuthModal({ open, onClose }) {
         JSON.stringify({ uid, phone, signedInAt: Date.now() }),
       );
 
+      // TODO(api): after Firebase OTP verification, call your backend (e.g.
+      // POST /api/auth/session with the Firebase ID token) to create/fetch the
+      // app user record (role, name, avatar, etc.) and include it in loginSuccess
+      // instead of just { uid, phone }.
       dispatch(loginSuccess({ uid, phone }));
 
       setSuccessMsg("Logged in successfully");

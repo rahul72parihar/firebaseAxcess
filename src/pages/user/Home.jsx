@@ -14,6 +14,7 @@ import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { IoHeart } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
+// TODO(api): fetch from GET /api/plans — pricing/minute tiers shown on the homepage
 const plans = [
   { mins: 3, price: 149 },
   { mins: 5, price: 229, popular: true },
@@ -25,6 +26,12 @@ export default function Home() {
 
   const [authOpen, setAuthOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(plans[1]);
+
+  // TODO(api): fetch current host profile from GET /api/hosts/:id (or /api/hosts/featured)
+  // — replace hardcoded "Aisha", follower count, avatar image, and LIVE status below.
+
+  // TODO(api): fetch from GET /api/hosts/:id/availability to drive minutes-left,
+  // total session length, and the booked/remaining progress bar in the "Minutes" card.
 
   return (
     <div className="ax-page">
@@ -161,6 +168,8 @@ export default function Home() {
             ))}
           </div>
 
+          {/* TODO(api): wire to payment gateway (e.g. POST /api/payments/create-order),
+              then on success call POST /api/queue/join before navigating to /queue. */}
           <button className="pay-btn" onClick={() => navigate("/queue")}>
             Pay ₹{selectedPlan.price} & Join Queue
           </button>

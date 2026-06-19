@@ -671,6 +671,9 @@ export default function LivePage() {
   };
 
   const confirmEndCall = () => {
+    // TODO(api): call POST /api/sessions/:id/end to finalize the session on
+    // the backend (total calls, earnings) before navigating — SessionEndedPage
+    // currently expects that summary data to already exist server-side.
     setActiveCall(null);
     setShowEndCallModal(false);
     navigate("/host/session-ended");

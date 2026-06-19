@@ -18,6 +18,14 @@ export default function PreLiveSetupPage() {
   const location = useLocation();
   const { duration = 120, time = "9 PM" } = location.state || {};
 
+  // TODO(api): once sessions are persisted (see CreateSessionPage TODO), fetch
+  // this page's data by session id from GET /api/host/sessions/:id instead of
+  // relying only on navigation state — covers the case of a page refresh/direct link.
+
+  // TODO(api): "Total Booked" (24+ Users), "Expected Earning" (₹4,200+) below are
+  // hardcoded placeholders — fetch real booking/earning projections from
+  // GET /api/host/sessions/:id/overview.
+
   const checklist = [
     "You'll be connected with users one by one.",
     "Users will be called in the booked order.",
@@ -149,6 +157,8 @@ export default function PreLiveSetupPage() {
               </p>
             </div>
             <div className="pls-go-live-right">
+              {/* TODO(api): call POST /api/host/sessions/:id/go-live to mark the
+                  session live on the backend before navigating to /host/live. */}
               <button
                 className="pls-go-live-btn"
                 onClick={() => navigate("/host/live")}

@@ -10,6 +10,14 @@ import { TbShieldCheck, TbUsers, TbVideoOff } from "react-icons/tb";
 import {useNavigate} from "react-router-dom";
 export default function QueuePage() {
   const navigate = useNavigate();
+
+  // TODO(api): replace all hardcoded values below with a live queue session fetched
+  // from GET /api/queue/:sessionId (position, estimated wait, host info, payment summary).
+  // TODO(api): subscribe to queue position updates via websocket/polling so
+  // "#7" and "~18 - 22 min" update in real time instead of being static.
+  // TODO(api): when the user's turn arrives, either auto-navigate to /call
+  // or enable the "Join Call" button only at that point (currently always enabled).
+
   return (
     <div className="queue-page">
       <div className="queue-container">

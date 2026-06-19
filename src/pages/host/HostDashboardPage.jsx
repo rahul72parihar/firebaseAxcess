@@ -13,6 +13,8 @@ import {
 import Header from "../../components/Header.jsx";
 import "./HostDashboardPage.css";
 
+// TODO(api): fetch from GET /api/host/stats — replace hardcoded value strings
+// with real all-time totals (Total Booked, Total Calls, Total Live Time, Total Earnings).
 const STATS = [
   { icon: FaUserFriends, color: "purple", value: "18", label: "Total Booked" },
   { icon: FaPhone, color: "green", value: "128", label: "Total Calls" },
@@ -20,6 +22,8 @@ const STATS = [
   { icon: FaRupeeSign, color: "purple", value: "₹8,420", label: "Total Earnings" },
 ];
 
+// TODO(api): tips could eventually be served/personalized from the backend
+// (e.g. GET /api/host/tips) rather than being static copy.
 const TIPS = [
   {
     icon: FaUserFriends,
@@ -43,6 +47,9 @@ const TIPS = [
 
 export default function HostDashboardPage() {
   const navigate = useNavigate();
+
+  // TODO(api): "Rohan" is hardcoded — pull the logged-in host's name/profile
+  // from the auth store or GET /api/host/profile (see useSelector usage in Header.jsx).
 
   return (
     <div className="hd-page">
@@ -127,6 +134,9 @@ export default function HostDashboardPage() {
       </main>
 
       {/* Bottom nav */}
+      {/* TODO(api): "Earnings" tab has no destination yet — link it once an
+          earnings/payout history page exists (e.g. /host/earnings backed by
+          GET /api/host/payouts). */}
       <footer className="hd-bottom-nav">
         <button className="hd-nav-item active">
           <FaHome />

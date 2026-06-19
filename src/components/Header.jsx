@@ -134,6 +134,9 @@ function UserMenu({ userName, avatarUrl, role, onProfile, onLogout }) {
 
 export default function Header({
   mode = "default", // 'default' | 'call' | 'queue' | 'create'
+  // TODO(api): userName/userAvatar defaults are placeholders — once the auth
+  // store carries the full profile (see AuthModal.jsx TODO), read them from
+  // useSelector(state => state.auth.user) instead of passing/defaulting here.
   userName = "Rohan",
   userAvatar = "https://i.pravatar.cc/100?img=12",
   showAuthButtons = false,

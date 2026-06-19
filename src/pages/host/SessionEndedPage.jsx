@@ -19,10 +19,15 @@ export default function SessionEndedPage() {
   const [showModal, setShowModal] = useState(false);
   const [requested, setRequested] = useState(false);
 
+  // TODO(api): fetch from GET /api/host/sessions/:id/summary — replace hardcoded
+  // totalCalls / totalEarning with the real values for the session that just ended.
   const totalCalls = 28;
   const totalEarning = 4200;
 
   const handleConfirm = () => {
+    // TODO(api): call POST /api/host/payouts/request (sessionId, amount) here;
+    // only flip to the "Payment Requested" UI state after a successful response,
+    // and surface errors (e.g. failed payout request) to the user.
     setRequested(true);
     setShowModal(false);
   };

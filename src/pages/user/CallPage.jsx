@@ -16,6 +16,17 @@ export default function Callpage() {
   const [showEndCallModal, setShowEndCallModal] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   const [infoMessage, setInfoMessage] = useState(true);
+
+  // TODO(api): connect to the WebRTC/calling SDK (e.g. join room via
+  // POST /api/calls/:id/join) and drive call state (host info, timer,
+  // mute/speaker, duration) from that connection instead of the static
+  // markup below.
+  // TODO(api): isMuted/isSpeakerOn toggles below currently only flip local
+  // UI state — wire them to the actual audio SDK mute/speaker controls.
+  // TODO(api): "Time Left" / "Call Duration" / progress bar are hardcoded
+  // — drive from the call's real elapsed/remaining time (server clock or
+  // local timer synced with session start time from the API).
+
   return (
     <div className="call-page">
       <div className="call-container">
@@ -189,6 +200,8 @@ export default function Callpage() {
                 Continue Call
               </button>
 
+              {/* TODO(api): call POST /api/calls/:id/end before navigating away
+                  so the backend can finalize duration/billing for this call. */}
               <button
                 className="modal-btn confirm"
                 onClick={() => navigate("/")}
