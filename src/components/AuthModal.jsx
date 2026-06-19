@@ -82,6 +82,10 @@ export default function AuthModal({ open, onClose }) {
     return cleaned.startsWith("+") && cleaned.length >= 8;
   }, [phoneNumber]);
 
+  const nationalNumber = phoneNumber.startsWith("+91")
+    ? phoneNumber.slice(3)
+    : phoneNumber.replace(/^\+/, "");
+
   async function handleSendOtp(e) {
     e?.preventDefault();
 
@@ -181,19 +185,26 @@ export default function AuthModal({ open, onClose }) {
             <div className="field">
               <label>Phone Number</label>
 
-              <input
-                value={phoneNumber}
-                onChange={(e) => {
-                  setPhoneNumber(e.target.value);
+              <div className="phone-input-group">
+                <span className="phone-prefix">+91</span>
 
-                  if (e.target.value.trim().length > 0) {
-                    setLocked(true);
-                  }
-                }}
-                placeholder="+14155552671"
-                inputMode="tel"
-                autoComplete="tel"
-              />
+                <input
+                  value={nationalNumber}
+                  onChange={(e) => {
+                    const digitsOnly = e.target.value.replace(/\D/g, "");
+
+                    setPhoneNumber(`+91${digitsOnly}`);
+
+                    if (digitsOnly.trim().length > 0) {
+                      setLocked(true);
+                    }
+                  }}
+                  placeholder="9876543210"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
+                  maxLength={10}
+                />
+              </div>
 
               <div className="hint">We'll send a one-time password (OTP).</div>
             </div>

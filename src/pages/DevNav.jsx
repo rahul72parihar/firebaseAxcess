@@ -18,6 +18,7 @@ const SECTIONS = [
     color: "#7c3aed",
     bg: "#f5f3ff",
     pages: [
+      { name: "Host Dashboard", path: "/host/dashboard", desc: "Host home screen with stats & quick tips" },
       { name: "Pre Setup", path: "/host/session", desc: "Pick duration & start time" },
       { name: "Pre-Live Setup", path: "/host/prelive", desc: "Review session before going live" },
       { name: "Live Page", path: "/host/live", desc: "Manage the live session" },

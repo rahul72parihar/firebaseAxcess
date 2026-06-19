@@ -9,6 +9,7 @@ import QueuePage from "./pages/user/QueuePage.jsx";
 import Callpage from "./pages/user/CallPage.jsx";
 
 // Host pages
+import HostDashboardPage from "./pages/host/HostDashboardPage.jsx";
 import CreateSessionPage from "./pages/host/CreateSessionPage.jsx";
 import PreLiveSetupPage from "./pages/host/PreLiveSetupPage.jsx";
 import LivePage from "./pages/host/LivePage.jsx";
@@ -36,6 +37,7 @@ function App() {
       <Route path="/call" element={<Callpage />} />
 
       {/* Host routes */}
+      <Route path="/host/dashboard" element={<HostDashboardPage />} />
       <Route path="/host/session" element={<CreateSessionPage />} />
       <Route path="/host/prelive" element={<PreLiveSetupPage />} />
       <Route path="/host/live" element={<LivePage />} />

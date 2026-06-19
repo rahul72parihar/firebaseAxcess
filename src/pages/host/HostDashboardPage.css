@@ -1,0 +1,382 @@
+/* ===== Page ===== */
+.hd-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #f5f5f8;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+}
+
+.hd-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 16px 100px;
+}
+
+.hd-content {
+  margin: 0 auto;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== Welcome ===== */
+.hd-welcome {
+  padding: 4px 2px 8px;
+}
+
+.hd-title {
+  font-size: 26px;
+  font-weight: 900;
+  margin: 0 0 6px;
+  color: #0f0f1a;
+}
+
+.hd-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ===== Card ===== */
+.hd-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.hd-section-title {
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0 0 14px;
+  color: #0f0f1a;
+}
+
+/* ===== Stats ===== */
+.hd-stats-card {
+  padding: 20px 8px;
+}
+
+.hd-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.hd-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  position: relative;
+  padding: 0 6px;
+  min-width: 0;
+}
+
+.hd-stat-divider {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: #e5e7eb;
+}
+
+.hd-stat-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.hd-stat-icon-wrap svg {
+  height: 18px;
+  width: 18px;
+}
+
+.hd-stat-icon-wrap.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.hd-stat-icon-wrap.green {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.hd-stat-icon-wrap.orange {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.hd-stat-value {
+  font-size: 20px;
+  font-weight: 900;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.hd-stat-label {
+  font-size: 11px;
+  color: #4b5563;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.hd-stat-sub {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+/* ===== Go Live card ===== */
+.hd-golive-card {
+  background: #f1eefc;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hd-golive-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.hd-golive-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #e3deff;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hd-golive-icon-wrap svg {
+  height: 20px;
+  width: 20px;
+}
+
+.hd-golive-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: #0f0f1a;
+}
+
+.hd-golive-desc {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.hd-golive-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.hd-golive-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #4338ca;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.hd-golive-btn:hover {
+  background: #3730a3;
+}
+
+.hd-golive-btn svg {
+  height: 16px;
+  width: 16px;
+}
+
+.hd-golive-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #6b7280;
+  margin: 0;
+  text-align: center;
+}
+
+.hd-golive-note svg {
+  height: 11px;
+  width: 11px;
+}
+
+/* ===== Tips ===== */
+.hd-tips-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.hd-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.hd-tip-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hd-tip-icon-wrap {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hd-tip-icon-wrap svg {
+  height: 16px;
+  width: 16px;
+}
+
+.hd-tip-icon-wrap.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.hd-tip-icon-wrap.green {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.hd-tip-icon-wrap.amber {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.hd-tip-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hd-tip-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.hd-tip-desc {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.hd-tip-arrow {
+  height: 14px;
+  width: 14px;
+  color: #c7c7d1;
+  flex-shrink: 0;
+}
+
+/* ===== Bottom nav ===== */
+.hd-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+}
+
+.hd-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 8px;
+  border-bottom: 2px solid transparent;
+}
+
+.hd-nav-item svg {
+  height: 18px;
+  width: 18px;
+}
+
+.hd-nav-item.active {
+  color: #4338ca;
+  border-bottom-color: #4338ca;
+}
+
+/* ===== Larger screens ===== */
+@media (min-width: 640px) {
+  .hd-main {
+    padding: 28px 24px 110px;
+  }
+
+  .hd-title {
+    font-size: 32px;
+  }
+
+  .hd-stat-value {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hd-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 18px;
+  }
+
+  .hd-stat:nth-child(3) .hd-stat-divider,
+  .hd-stat:nth-child(1) .hd-stat-divider {
+    display: none;
+  }
+}

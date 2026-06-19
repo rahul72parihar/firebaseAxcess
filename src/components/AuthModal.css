@@ -89,6 +89,39 @@
   box-shadow: 0 0 0 3px rgba(75,48,227,0.15);
 }
 
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.phone-input-group:focus-within {
+  border-color: #4b30e3;
+  box-shadow: 0 0 0 3px rgba(75, 48, 227, 0.15);
+}
+
+.phone-prefix {
+  padding: 12px 10px 12px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #555;
+  background: #f7f6fb;
+  border-right: 1px solid #ececec;
+  user-select: none;
+}
+
+.phone-input-group input {
+  border: none;
+  border-radius: 0;
+  flex: 1;
+}
+
+.phone-input-group input:focus {
+  box-shadow: none;
+}
+
 .hint{
   margin-top: 6px;
   color:#666;
