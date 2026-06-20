@@ -13,8 +13,6 @@ import {
   TbVolumeOff,
   TbPhoneOff,
   TbClock,
-  TbUsers,
-  TbCurrencyRupee,
   TbShieldCheck,
   TbCheck,
   TbHourglass,
@@ -196,56 +194,6 @@ function LiveSummaryCard({ stats }) {
               / {stats.totalDuration}
             </span>
           </span>
-        </div>
-      </div>
-
-      <h1 className="ax-live-summary-title">You are live!</h1>
-      <p className="ax-live-summary-subtitle">
-        You're on air. We'll connect you with users one by one.
-      </p>
-
-      <div className="ax-live-summary-stats">
-        <div className="ax-live-summary-stat">
-          <span className="ax-icon-circle ax-icon-circle--gray">
-            <TbClock size={18} />
-          </span>
-          <div>
-            <span className="ax-live-summary-stat-label">Session Time</span>
-            <span className="ax-live-summary-stat-value">
-              {stats.sessionTime}
-            </span>
-          </div>
-        </div>
-
-        <div className="ax-live-summary-stat">
-          <span className="ax-icon-circle ax-icon-circle--gray">
-            <TbUsers size={18} />
-          </span>
-          <div>
-            <span className="ax-live-summary-stat-label">Total Booked</span>
-            {/* TODO: source from API instead of bookedSlots.length if the
-                backend tracks this independently of the visible slot list */}
-            <span className="ax-live-summary-stat-value">
-              {stats.totalBooked} Users
-            </span>
-          </div>
-        </div>
-
-        <div className="ax-live-summary-stat">
-          <span className="ax-icon-circle ax-icon-circle--green">
-            <TbCurrencyRupee size={18} />
-          </span>
-          <div>
-            <span className="ax-live-summary-stat-label">Total Earning</span>
-            <span className="ax-live-summary-stat-value">
-              ₹{stats.totalEarning.toLocaleString("en-IN")}
-            </span>
-          </div>
-        </div>
-
-        <div className="ax-live-summary-secure">
-          <TbShieldCheck size={18} />
-          Calls are secure and encrypted
         </div>
       </div>
     </section>

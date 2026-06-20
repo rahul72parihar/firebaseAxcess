@@ -311,11 +311,12 @@
 
 .ax-live-summary-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 14px;
+  margin-bottom: 0;
+  flex: 1;
 }
 
 .ax-live-summary-badges {
@@ -366,6 +367,12 @@
     height: 18px;
     opacity: 0;
   }
+}
+
+.ax-live-summary {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
 }
 
 .ax-live-summary-elapsed {
