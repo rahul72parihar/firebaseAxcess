@@ -4,7 +4,8 @@
   /* min-height: 64px; */
   margin: 0 auto;
 
-  padding: 16px;
+  padding: 5px 8px;
+  padding-top: 10px;
 
   display: flex;
   align-items: center;
@@ -16,18 +17,18 @@
 .ax-header-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   font-weight: 700;
 }
 
 .ax-header-logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 
 .ax-header-logo-text {
-  font-size: 28px;
+  font-size: 20px;
 }
 
 .ax-header-secure {
@@ -41,26 +42,28 @@
 .ax-header-auth-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 10px;
   border: 1px solid rgba(124, 58, 237, 0.25);
   background: rgba(124, 58, 237, 0.08);
   cursor: pointer;
   font-weight: 600;
+  font-size: 13px;
 }
 
 .ax-header-end-call {
-  padding: 10px 14px;
+  padding: 7px 12px;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   cursor: pointer;
   background: rgba(239, 68, 68, 0.12);
   color: #b91c1c;
   font-weight: 700;
+  font-size: 13px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .ax-header--queue .ax-header-right {
@@ -85,13 +88,14 @@
 .ax-header-user-box {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   font-weight: 700;
+  font-size: 13px;
 }
 
 .ax-header-user-box img {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -99,43 +103,43 @@
 .ax-create-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 800;
 }
 
 .ax-create-logo {
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .ax-create-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 9px;
   font-weight: 700;
 }
 
 .ax-create-avatar {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .ax-create-chevron {
-  font-size: 18px;
+  font-size: 14px;
   transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
   .ax-header-logo-text {
-    font-size: 24px;
+    font-size: 17px;
   }
   .ax-header-secure {
     display: none !important;
   }
   .ax-header-logo-icon {
-    width: 36px;
-    height: 36px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
   }
 }
@@ -170,14 +174,14 @@
 
 .ax-user-menu-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);
   right: 0;
-  min-width: 180px;
+  min-width: 160px;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  border-radius: 9px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  padding: 6px;
+  padding: 5px;
   z-index: 200;
   display: flex;
   flex-direction: column;
@@ -187,16 +191,16 @@
 .ax-user-menu-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   width: 100%;
   border: none;
   background: none;
   cursor: pointer;
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: #374151;
-  padding: 8px 10px;
+  padding: 7px 9px;
   border-radius: 6px;
   text-align: left;
 }
@@ -220,22 +224,122 @@
 }
 
 .ax-user-menu-role-badge {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: #7c3aed;
   background: rgba(124, 58, 237, 0.08);
   border-radius: 6px;
-  padding: 4px 10px;
-  margin: 0 8px 6px;
+  padding: 3px 8px;
+  margin: 0 6px 5px;
   text-align: center;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
-@media (max-width: 768px) {
+
+/* ===== Desktop-only: scale header up a bit ===== */
+@media (min-width: 768px) {
   .ax-header {
-    padding: 10px;
+    padding: 14px 24px;
   }
 
+  .ax-header-logo {
+    gap: 10px;
+  }
+
+  .ax-header-logo-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .ax-header-logo-text {
+    font-size: 26px;
+  }
+
+  .ax-header-secure {
+    font-size: 15px;
+    gap: 9px;
+  }
+
+  .ax-header-auth-btn {
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
+  .ax-header-end-call {
+    padding: 10px 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  .ax-header-right {
+    gap: 24px;
+  }
+
+  .ax-header-queue-right {
+    gap: 24px;
+  }
+
+  .ax-header-user-box {
+    gap: 9px;
+    font-size: 15px;
+  }
+
+  .ax-header-user-box img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .ax-create-left {
+    gap: 10px;
+  }
+
+  .ax-create-logo {
+    font-size: 18px;
+  }
+
+  .ax-create-right {
+    gap: 12px;
+  }
+
+  .ax-create-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ax-create-chevron {
+    font-size: 18px;
+  }
+
+  .ax-user-menu-dropdown {
+    min-width: 195px;
+    border-radius: 11px;
+    padding: 7px;
+    top: calc(100% + 8px);
+  }
+
+  .ax-user-menu-item {
+    font-size: 14px;
+    padding: 9px 11px;
+    gap: 9px;
+  }
+
+  .ax-user-menu-role-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    margin: 0 8px 7px;
+  }
+
+  .ax-header-secure svg,
+  .ax-header-auth-btn svg,
+  .ax-header-end-call svg,
+  .ax-user-menu-chevron,
+  .ax-user-menu-item svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
 }
 

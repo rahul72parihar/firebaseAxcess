@@ -7,7 +7,7 @@ import girlImg from "../../assets/girl.png";
 import instaIcon from "../../assets/Instagram_icon.png";
 
 import { TbLock } from "react-icons/tb";
-import { FiClock } from "react-icons/fi";
+import { FiPhone } from "react-icons/fi";
 import { TbBellRinging } from "react-icons/tb";
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
@@ -44,62 +44,80 @@ export default function Home() {
         />
 
         {/* Hero */}
-        <section className="hero-card">
-          <div className="hero-content">
-            <div className="live-badge">
-              <span className="live-dot" />
-              LIVE NOW
+        <div className="hero-wrap">
+          <section className="hero-banner">
+            <div className="hero-bg">
+              <img src={girlImg} alt="Aisha" className="hero-bg-img" />
+              <div className="hero-overlay" />
             </div>
 
-            <h1>
-              Talk 1-on-1
-              <br />
-              with <span>Aisha</span>{" "}
-              <IoHeart
-                size={28}
-                style={{
-                  verticalAlign: "middle",
-                  color: "#7c3aed",
-                }}
+            <div className="hero-top-row">
+              <div className="live-badge">
+                <span className="live-dot" />
+                LIVE NOW
+              </div>
+            </div>
+
+            <div className="hero-text">
+              <h1>
+                Talk 1-on-1
+              </h1>
+
+              {/* <p className="hero-location">20 • India</p> */}
+
+              <p className="hero-bio">
+                Real conversations. No DMs.{" "}
+                <IoHeart size={16} style={{ verticalAlign: "middle", color: "#c4b5fd" }} />
+              </p>
+            </div>
+
+            <div className="hero-insta-badge">
+              <img
+                src={instaIcon}
+                alt="Instagram Icon"
+                className="insta-icon-homepage"
               />
-            </h1>
+              <span>Aisha, 20</span>
+              <RiVerifiedBadgeFill className="verified" />
+            </div>
+          </section>
 
-            <p>Real conversations. No DMs.</p>
-
-            <div className="hero-meta">
-              <div>
-                <strong>90 min</strong>
-                <span>Session</span>
+          {/* Overlapping stat card */}
+          <div className="hero-stat-card">
+            {/* Section 1: call info + minutes-left badge */}
+            <div className="hero-stat-section hero-stat-section-top">
+              <div className="hero-stat-left">
+                <span className="hero-stat-icon">
+                  <FiPhone size={18} />
+                </span>
+                <div>
+                  <strong>1-on-1 Audio Call</strong>
+                  <span>90 min Session</span>
+                </div>
               </div>
 
-              <div>
-                <strong>Audio Call</strong>
-                <span>1-on-1</span>
+              <div className="hero-stat-badge">
+                <strong>36 min left</strong>
+                <span>of 90 min</span>
+              </div>
+            </div>
+
+            <div className="hero-stat-divider" />
+
+            {/* Section 2: progress + booked/remaining */}
+            <div className="hero-stat-section hero-stat-section-bottom">
+              <div className="progress hero-progress">
+                <div className="progress-fill"></div>
+              </div>
+
+              <div className="hero-progress-labels">
+                <span>54 min already booked</span>
+                <span className="hero-progress-divider" />
+                <span>Limited slot available</span>
               </div>
             </div>
           </div>
-
-          <div className="hero-image-wrap">
-            <img src={girlImg} alt="Aisha" className="hero-image" />
-
-            <div className="profile-card">
-              <h3>
-                <img
-                  src={instaIcon}
-                  alt="Instagram Icon"
-                  className="insta-icon-homepage"
-                />
-                Aisha, 20
-                <RiVerifiedBadgeFill
-                  className="verified"
-                  style={{ marginLeft: 6 }}
-                />
-              </h3>
-
-              <p>8.7K followers</p>
-            </div>
-          </div>
-        </section>
+        </div>
 
         <AuthModal
           open={authOpen}
@@ -107,7 +125,7 @@ export default function Home() {
         />
 
         {/* Minutes */}
-        <section className="card minutes-card">
+        {/* <section className="card minutes-card">
           <div>
             <h2>Minutes Available</h2>
 
@@ -136,7 +154,7 @@ export default function Home() {
               <span>36 min remaining</span>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Pricing */}
         <section className="card">
@@ -149,7 +167,11 @@ export default function Home() {
                 onClick={() => setSelectedPlan(plan)}
                 className={`plan ${
                   selectedPlan.mins === plan.mins ? "active" : ""
-                }`}
+                }
+                ${
+                  plan.popular ? "popular-plan-card" : ""
+                }
+                `}
               >
                 {plan.popular && <div className="popular">Most Popular</div>}
 

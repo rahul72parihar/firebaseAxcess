@@ -15,7 +15,7 @@ export default function Callpage() {
   const [isMuted, setIsMuted] = useState(false);
   const [showEndCallModal, setShowEndCallModal] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
-  const [infoMessage, setInfoMessage] = useState(true);
+  // const [infoMessage, setInfoMessage] = useState(true);
 
   // TODO(api): connect to the WebRTC/calling SDK (e.g. join room via
   // POST /api/calls/:id/join) and drive call state (host info, timer,
@@ -43,7 +43,7 @@ export default function Callpage() {
 
           <div className="hero-right">
             {/* Info Message */}
-            {infoMessage &&<div className="call-info-banner call-info-banner-mobile">
+            <div className="call-info-banner call-info-banner-mobile">
               <div className="call-info-left">
                 <span className="info-icon">i</span>
 
@@ -53,8 +53,8 @@ export default function Callpage() {
                 </div>
               </div>
 
-              <button className="banner-close" onClick={()=>{setInfoMessage(false)}}>✕</button>
-            </div>}
+              {/* <button className="banner-close" onClick={()=>{setInfoMessage(false)}}>✕</button> */}
+            </div>
 
             {/* Existing Timer Card */}
             <div className="timer-card">
@@ -71,7 +71,7 @@ export default function Callpage() {
           </div>
         </section>
 
-            {infoMessage &&<div className="call-info-banner call-info-banner-desktop">
+            <div className="call-info-banner call-info-banner-desktop">
               <div className="call-info-left">
                 <span className="info-icon">i</span>
 
@@ -81,17 +81,17 @@ export default function Callpage() {
                 </div>
               </div>
 
-              <button className="banner-close" onClick={()=>{setInfoMessage(false)}}>✕</button>
-            </div>}
+              {/* <button className="banner-close" onClick={()=>{setInfoMessage(false)}}>✕</button> */}
+            </div>
         {/* Avatar Section */}
         <section className="avatar-section">
           <div className="wave wave-left"></div>
 
           <div className="avatar-wrapper">
-            <div className="live-badge">
+            {/* <div className="live-badge">
               <span className="live-dot" />
               LIVE
-            </div>
+            </div> */}
             <div className="avatar-ring">
               <img
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80"

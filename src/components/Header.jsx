@@ -82,7 +82,7 @@ function UserMenu({ userName, avatarUrl, role, onProfile, onLogout }) {
         <img src={avatarUrl} alt={userName} />
         <span>{userName}</span>
         <TbChevronDown
-          size={16}
+          size={14}
           className={`ax-user-menu-chevron ${open ? "ax-user-menu-chevron--open" : ""}`}
         />
       </button>
@@ -107,7 +107,7 @@ function UserMenu({ userName, avatarUrl, role, onProfile, onLogout }) {
                 else navigate(href);
               }}
             >
-              <Icon size={16} />
+              <Icon size={14} />
               {label}
             </button>
           ))}
@@ -123,7 +123,7 @@ function UserMenu({ userName, avatarUrl, role, onProfile, onLogout }) {
               onLogout();
             }}
           >
-            <TbLogout size={16} />
+            <TbLogout size={14} />
             Logout
           </button>
         </div>
@@ -225,7 +225,7 @@ export default function Header({
 
       <div className="ax-header-right">
         <div className="ax-header-secure">
-          <TbShieldLock size={18} />
+          <TbShieldLock size={15} />
           Secure Payment
         </div>
 
@@ -243,7 +243,7 @@ export default function Header({
               onClick={handleLogin}
               type="button"
             >
-              <TbUser size={18} />
+              <TbUser size={14} />
               Login / Signup
             </button>
           ))}

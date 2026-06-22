@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaCalendarAlt,
@@ -12,9 +12,12 @@ import {
   FaLightbulb,
   FaLink,
   FaRegCopy,
+  FaTimes,
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
 import "./PreLiveSetupPage.css";
+
+const GO_LIVE_COUNTDOWN_SECONDS = 5;
 
 export default function PreLiveSetupPage() {
   const navigate = useNavigate();
@@ -22,6 +25,41 @@ export default function PreLiveSetupPage() {
   const { duration = 120, time = "9 PM" } = location.state || {};
 
   const [copied, setCopied] = useState(false);
+  const [showGoLiveModal, setShowGoLiveModal] = useState(false);
+  const [countdown, setCountdown] = useState(GO_LIVE_COUNTDOWN_SECONDS);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (!showGoLiveModal) return;
+
+    setCountdown(GO_LIVE_COUNTDOWN_SECONDS);
+    intervalRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalRef.current);
+  }, [showGoLiveModal]);
+
+  const openGoLiveModal = () => setShowGoLiveModal(true);
+
+  const cancelGoLive = () => {
+    clearInterval(intervalRef.current);
+    setShowGoLiveModal(false);
+  };
+
+  const confirmGoLive = () => {
+    if (countdown > 0) return;
+    clearInterval(intervalRef.current);
+    // TODO(api): call POST /api/host/sessions/:id/go-live to mark the
+    // session live on the backend before navigating to /host/live.
+    navigate("/host/live");
+  };
 
   // TODO(api): fetch the real generated session link from
   // GET /api/host/sessions/:id (or include it in the response when the
@@ -206,11 +244,9 @@ export default function PreLiveSetupPage() {
               </p>
             </div>
             <div className="pls-go-live-right">
-              {/* TODO(api): call POST /api/host/sessions/:id/go-live to mark the
-                  session live on the backend before navigating to /host/live. */}
               <button
                 className="pls-go-live-btn"
-                onClick={() => navigate("/host/live")}
+                onClick={openGoLiveModal}
               >
                 <FaBroadcastTower />
                 GO LIVE
@@ -240,6 +276,41 @@ export default function PreLiveSetupPage() {
 
         </div>
       </main>
+
+      {/* Go Live confirmation modal */}
+      {showGoLiveModal && (
+        <div className="pls-modal-overlay" onClick={cancelGoLive}>
+          <div className="pls-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="pls-modal-close" onClick={cancelGoLive}>
+              <FaTimes />
+            </button>
+
+            <div className="pls-modal-icon-wrap">
+              <FaBroadcastTower className="pls-modal-icon" />
+            </div>
+
+            <h3 className="pls-modal-title">Go live now?</h3>
+            <p className="pls-modal-subtitle">
+              Once you go live, users will start connecting with you one by one.
+              Make sure you're ready before continuing.
+            </p>
+
+            <div className="pls-modal-actions">
+              <button className="pls-modal-cancel" onClick={cancelGoLive}>
+                Cancel
+              </button>
+              <button
+                className="pls-modal-confirm"
+                onClick={confirmGoLive}
+                disabled={countdown > 0}
+              >
+                <FaBroadcastTower />
+                {countdown > 0 ? `Go Live (${countdown}s)` : "Go Live"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
