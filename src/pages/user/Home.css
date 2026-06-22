@@ -233,7 +233,7 @@ img {
   /* display: none !important; */
   position: absolute;
   right: var(--gap-lg);
-  bottom: 86px;
+  bottom: 53px;
   z-index: 2;
   display: inline-flex;
   align-items: center;
@@ -755,7 +755,7 @@ img {
     margin-bottom: 20px;
   }
   .hero-insta-badge{
-    bottom: 40px;
+    bottom: 32px;
   }
 
   .hero-stat-card {
