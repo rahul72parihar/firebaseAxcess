@@ -135,7 +135,7 @@ img {
   background: #fff;
   color: var(--primary);
   padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 18px);
-  border-radius: 14px;
+  border-radius: 10px;
   font-weight: 700;
   font-size: clamp(0.78rem, 0.9vw, 0.9rem);
   cursor: pointer;
@@ -164,7 +164,7 @@ img {
 .hero-banner {
   flex: 1;
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: clamp(8px, 1vw, 14px);
   overflow: hidden;
   padding: var(--gap-lg);
   display: flex;
@@ -215,7 +215,7 @@ img {
   gap: 8px;
   background: #fff;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: 6px;
   color: var(--danger);
   font-weight: 700;
   font-size: clamp(0.7rem, 0.9vw, 0.9rem);
@@ -241,7 +241,7 @@ img {
   background: #fff;
   color: #111;
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: 8px;
   font-weight: 600;
   font-size: clamp(0.75rem, 0.9vw, 0.9rem);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
@@ -250,7 +250,7 @@ img {
 .insta-icon-homepage {
   height: 20px;
   width: 20px;
-  border-radius: 5px;
+  border-radius: 3px;
   object-fit: cover;
 }
 
@@ -271,8 +271,8 @@ img {
   color: black;
   background-color: white;
   width: max-content;
-  padding: 20px;
-  border-radius: 30px;
+  padding: 10px 15px;
+  border-radius: 8px;
 }
 
 .hero-title-verified {
@@ -291,8 +291,12 @@ img {
 
 .hero-bio {
   font-size: clamp(0.8rem, 1vw, 1rem);
-  color: rgba(255, 255, 255, 0.85);
+  color: #111;
+  background: #fff;
+  width: max-content;
   max-width: 480px;
+  padding: 8px 16px;
+  border-radius: 5px;
 }
 
 .hero-stat-card {
@@ -302,7 +306,7 @@ img {
   z-index: 2;
   background: #fff;
   color: #111;
-  border-radius: var(--radius-md);
+  border-radius: 10px;
   padding: clamp(12px, 1.6vw, 18px);
   margin: -40px auto 0;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
@@ -366,7 +370,7 @@ img {
   text-align: right;
   background: var(--primary-soft);
   padding: 8px 14px;
-  border-radius: 12px;
+  border-radius: 5px;
 }
 
 .hero-stat-badge strong {
@@ -386,16 +390,51 @@ img {
 .hero-progress-labels {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: clamp(10px, 2vw, 24px);
   font-size: clamp(0.7rem, 0.9vw, 0.85rem);
   color: var(--text-muted);
+}
+
+.hero-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-soft);
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+  width: fit-content;
+}
+
+.hero-live-badge .live-dot {
+  background: var(--primary);
 }
 
 .hero-progress-divider {
   width: 1px;
   height: 14px;
   background: var(--border);
+}
+
+.hero-progress-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-progress-item svg {
+  color: inherit;
+}
+
+.hero-progress-icon-primary {
+  color: var(--primary) !important;
+}
+
+.hero-progress-bold {
+  color: #111;
 }
 
 .limited-slot-warning{
@@ -555,19 +594,22 @@ img {
   font-size: clamp(0.58rem, 0.8vw, 0.8rem);
   font-weight: 600;
   white-space: nowrap;
-  box-shadow: 0 0 10px rgba(75, 48, 227, 0.55);
+  /* box-shadow: 0 0 5px rgba(75, 48, 227, 0.55); */
   z-index: 2;
 }
 
 .popular-plan-card {
   height: 110%;
   transform: scale(1.06);
-  border: 2px solid var(--primary) !important;
-  box-shadow: 0 0 0 4px rgba(75, 48, 227, 0.12), 0 8px 24px rgba(75, 48, 227, 0.25);
+  /* border: 2px solid rgba(75, 48, 227, 0.3); */
   z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.popular-plan-card.active {
+  border: 2px solid var(--primary);
 }
 
 .popular-plan-card:hover {
@@ -717,7 +759,7 @@ img {
   }
 
   .hero-stat-card {
-    width: 85%;
+    width: 94%;
     margin: -22px auto 0 auto;
     padding: 12px;
   }

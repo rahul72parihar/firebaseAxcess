@@ -11,7 +11,7 @@ import { FiPhone } from "react-icons/fi";
 import { TbBellRinging } from "react-icons/tb";
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { IoHeart } from "react-icons/io5";
+import { FiUsers, FiClock } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 // TODO(api): fetch from GET /api/plans — pricing/minute tiers shown on the homepage
@@ -66,8 +66,7 @@ export default function Home() {
               {/* <p className="hero-location">20 • India</p> */}
 
               <p className="hero-bio">
-                Real conversations. No DMs.{" "}
-                <IoHeart size={16} style={{ verticalAlign: "middle", color: "#c4b5fd" }} />
+                Real conversations. No DMs.
               </p>
             </div>
 
@@ -96,9 +95,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="hero-stat-badge">
-                <strong>36 min left</strong>
-                <span>of 90 min</span>
+              <div className="hero-live-badge">
+                <span className="live-dot" />
+                LIVE NOW
               </div>
             </div>
 
@@ -106,14 +105,20 @@ export default function Home() {
 
             {/* Section 2: progress + booked/remaining */}
             <div className="hero-stat-section hero-stat-section-bottom">
-              <div className="progress hero-progress">
-                <div className="progress-fill"></div>
+              <div className="hero-progress-labels">
+                <span className="hero-progress-item">
+                  <FiUsers size={14} className="hero-progress-icon-primary" />
+                  <strong className="hero-progress-bold">54</strong> min already booked
+                </span>
+                <span className="hero-progress-divider" />
+                <span className="hero-progress-item limited-slot-warning">
+                  <FiClock size={14} />
+                  Limited slots available! Hurry up!
+                </span>
               </div>
 
-              <div className="hero-progress-labels">
-                <span>54 min already booked</span>
-                <span className="hero-progress-divider" />
-                <span className="limited-slot-warning">Limited slots available! Hurry up!</span>
+              <div className="progress hero-progress">
+                <div className="progress-fill"></div>
               </div>
             </div>
           </div>
@@ -132,7 +137,7 @@ export default function Home() {
             <div className="minutes-row">
               <div className="big-number">36</div>
 
-              <div>
+             <div>
                 <div className="min-left">min left</div>
                 <div>of 90 min</div>
               </div>
