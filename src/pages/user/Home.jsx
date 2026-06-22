@@ -7,7 +7,7 @@ import girlImg from "../../assets/girl.png";
 import instaIcon from "../../assets/Instagram_icon.png";
 
 import { TbLock } from "react-icons/tb";
-import { FiPhone } from "react-icons/fi";
+import { FaPhoneVolume } from "react-icons/fa6";
 import { TbBellRinging } from "react-icons/tb";
 
 import { RiVerifiedBadgeFill } from "react-icons/ri";
@@ -87,7 +87,7 @@ export default function Home() {
             <div className="hero-stat-section hero-stat-section-top">
               <div className="hero-stat-left">
                 <span className="hero-stat-icon">
-                  <FiPhone size={18} />
+                  <FaPhoneVolume size={18} />
                 </span>
                 <div>
                   <strong>1-on-1 Audio Call</strong>
@@ -95,7 +95,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="hero-live-badge">
+              <div className="live-badge">
                 <span className="live-dot" />
                 LIVE NOW
               </div>
