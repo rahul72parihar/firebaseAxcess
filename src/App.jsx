@@ -7,6 +7,7 @@ import DevNav from "./pages/DevNav.jsx";
 import Home from "./pages/user/Home.jsx";
 import QueuePage from "./pages/user/QueuePage.jsx";
 import Callpage from "./pages/user/CallPage.jsx";
+import JoinSessionPage from "./pages/user/JoinSessionPage.jsx";
 
 // Host pages
 import HostLoginPage from "./pages/host/HostLoginPage.jsx";
@@ -36,6 +37,7 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/queue" element={<QueuePage />} />
       <Route path="/call" element={<Callpage />} />
+      <Route path="/join/:hostUid" element={<JoinSessionPage />} />
 
       {/* Host routes */}
       <Route path="/host/login" element={<HostLoginPage />} />

@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { doc, deleteDoc } from "firebase/firestore";
+
 import { joinVoiceChannel } from "../../services/agora";
+import { db } from "../../firebase";
 
 // Reuses the same Header you already have. Adjust the relative path below
 // if LivePage.jsx ends up in a different folder than this assumes
@@ -660,6 +663,11 @@ export default function LivePage() {
     // currently expects that summary data to already exist server-side.
     await callRef.current?.leave();
     callRef.current = null;
+
+    if (hostUid) {
+      await deleteDoc(doc(db, "liveSessions", hostUid)).catch(console.error);
+    }
+
     setActiveCall(null);
     setShowEndCallModal(false);
     navigate("/host/session-ended");

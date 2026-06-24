@@ -7,16 +7,43 @@ import { BsStars, BsExclamationTriangle, BsInfoCircle } from "react-icons/bs";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { TbShieldCheck, TbUsers, TbVideoOff } from "react-icons/tb";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { collection, limit, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+
 export default function QueuePage() {
   const navigate = useNavigate();
 
-  // TODO(api): replace all hardcoded values below with a live queue session fetched
-  // from GET /api/queue/:sessionId (position, estimated wait, host info, payment summary).
-  // TODO(api): subscribe to queue position updates via websocket/polling so
-  // "#7" and "~18 - 22 min" update in real time instead of being static.
-  // TODO(api): when the user's turn arrives, either auto-navigate to /call
-  // or enable the "Join Call" button only at that point (currently always enabled).
+  // TODO(api): position/wait-time/payment summary are still hardcoded below —
+  // replace with a live queue session fetched from GET /api/queue/:sessionId
+  // and subscribe to position updates via websocket/polling so "#7" and
+  // "~18 - 22 min" update in real time, and auto-navigate to /call (or enable
+  // "Join Call" only) once it's actually this user's turn.
+
+  // Finds whichever host is currently live so "Join Call" can route the user
+  // into that host's real Agora channel. TODO(api): once bookings exist,
+  // this should instead resolve to the specific host this user booked.
+  const [liveChannel, setLiveChannel] = useState(null);
+
+  useEffect(() => {
+    const liveQuery = query(
+      collection(db, "liveSessions"),
+      where("status", "==", "live"),
+      limit(1),
+    );
+
+    const unsubscribe = onSnapshot(
+      liveQuery,
+      (snap) => {
+        const liveDoc = snap.docs[0]?.data();
+        setLiveChannel(liveDoc?.channelName ?? null);
+      },
+      (err) => console.error("Failed to look up live session:", err),
+    );
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="queue-page">
@@ -77,9 +104,14 @@ export default function QueuePage() {
                 </div>
               </div>
 
-              <button className="join-btn" onClick={() => navigate("/call")}>
+              <button
+                className="join-btn"
+                disabled={!liveChannel}
+                onClick={() => navigate(`/call?channel=${liveChannel}`)}
+                title={liveChannel ? undefined : "Waiting for the host to go live"}
+              >
                 <FiPhone size={16} />
-                Join Call
+                {liveChannel ? "Join Call" : "Waiting for host..."}
               </button>
 
             </div>

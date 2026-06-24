@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import {
   FaCalendarAlt,
   FaUserFriends,
@@ -13,9 +15,9 @@ import {
   FaLink,
   FaRegCopy,
   FaTimes,
-  FaExclamation,
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
+import { db } from "../../firebase";
 import "./PreLiveSetupPage.css";
 
 const GO_LIVE_COUNTDOWN_SECONDS = 5;
@@ -23,7 +25,8 @@ const GO_LIVE_COUNTDOWN_SECONDS = 5;
 export default function PreLiveSetupPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { duration = 120, time = "9 PM" } = location.state || {};
+  const hostUid = useSelector((s) => s.auth.uid);
+  const { duration = 120 } = location.state || {};
 
   const [copied, setCopied] = useState(false);
   const [showGoLiveModal, setShowGoLiveModal] = useState(false);
@@ -54,22 +57,35 @@ export default function PreLiveSetupPage() {
     setShowGoLiveModal(false);
   };
 
-  const confirmGoLive = () => {
+  const confirmGoLive = async () => {
     if (countdown > 0) return;
     clearInterval(intervalRef.current);
-    // TODO(api): call POST /api/host/sessions/:id/go-live to mark the
-    // session live on the backend before navigating to /host/live.
+
+    // Marks this host's channel as live so QueuePage can discover it and
+    // route users into the same Agora channel for the call.
+    if (hostUid) {
+      const channelName = `host-${hostUid}`;
+      await setDoc(doc(db, "liveSessions", hostUid), {
+        hostUid,
+        channelName,
+        duration,
+        status: "live",
+        startedAt: serverTimestamp(),
+      }).catch(console.error);
+    }
+
     navigate("/host/live");
   };
 
-  // TODO(api): fetch the real generated session link from
-  // GET /api/host/sessions/:id (or include it in the response when the
-  // session is created on CreateSessionPage) instead of this placeholder.
-  const sessionLink = "axcess.live/aisha/session-12345";
+  // Real, working link: opens JoinSessionPage for this host, which waits
+  // for liveSessions/{hostUid} to flip to "live" and then drops the user
+  // straight into the call.
+  const sessionUrl = `${window.location.origin}/join/${hostUid ?? ""}`;
+  const sessionLink = sessionUrl.replace(/^https?:\/\//, "");
 
   const handleCopy = () => {
     if (navigator?.clipboard) {
-      navigator.clipboard.writeText(`https://${sessionLink}`).catch(() => {});
+      navigator.clipboard.writeText(sessionUrl).catch(() => {});
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
@@ -100,24 +116,20 @@ export default function PreLiveSetupPage() {
           {/* Important notice */}
           <div className="pls-important-card">
             <span className="pls-important-badge">
-              <FaExclamation />
-              Important
+              <FaBroadcastTower />
+              Go Live Now
             </span>
             <div className="pls-important-body">
               <span className="pls-important-icon-wrap">
-                <FaClock className="pls-important-icon" />
+                <FaBroadcastTower className="pls-important-icon" />
               </span>
               <div className="pls-important-divider" />
               <div className="pls-important-text">
                 <h3 className="pls-important-title">
-                  Post your link <span className="pls-important-accent">1 hour</span> before{" "}
-                  <span className="pls-important-accent">
-                    {time === "9 PM" ? "9 pm" : time.toLowerCase()}
-                  </span>{" "}
-                  live
+                  Share your link, then go live <span className="pls-important-accent">whenever you're ready</span>
                 </h3>
                 <p className="pls-important-desc">
-                  This gives your audience the right time to see your story, book their slot, and join your live.
+                  There's no scheduled start time — post your link now so people can see your story and book a slot before you start.
                 </p>
               </div>
             </div>
@@ -207,20 +219,20 @@ export default function PreLiveSetupPage() {
 
             <div className="pls-divider" />
 
-            {/* Session Start Time */}
+            {/* Session Start */}
             <div className="pls-start-time">
               <div className="pls-start-time-header">
-                <FaClock className="pls-start-icon" />
-                <span className="pls-start-label">Session Start Time</span>
+                <FaBroadcastTower className="pls-start-icon" />
+                <span className="pls-start-label">Session Start</span>
               </div>
               <p className="pls-start-desc">
-                Your session is set to start at{" "}
+                Your session goes live{" "}
                 <span className="pls-time-badge">
-                  <FaClock className="pls-time-badge-icon" />
-                  {time === "9 PM" ? "9:00 PM" : time}
+                  <FaBroadcastTower className="pls-time-badge-icon" />
+                  As soon as you go live
                 </span>
               </p>
-              <p className="pls-start-note">This time cannot be changed.</p>
+              <p className="pls-start-note">No scheduled time — you're in control.</p>
             </div>
           </section>
 

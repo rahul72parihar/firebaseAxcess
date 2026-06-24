@@ -6,11 +6,10 @@ import {
   FaCalendarAlt,
   FaDollarSign,
   FaArrowRight,
-  FaPencilAlt,
   FaInfoCircle,
   FaShieldAlt,
   FaLightbulb,
-  FaExclamation,
+  FaBroadcastTower,
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
 import "./CreateSessionPage.css";
@@ -38,14 +37,9 @@ const DURATIONS = [
   },
 ];
 
-// TODO(api): fetch available slots from GET /api/host/availability — should
-// reflect the host's real calendar/timezone instead of this fixed list.
-const START_TIMES = ["7 PM", "8 PM", "9 PM", "10 PM"];
-
 export default function CreateSessionPage() {
   const navigate = useNavigate();
   const [selectedDuration, setSelectedDuration] = useState(120);
-  const [selectedTime, setSelectedTime] = useState("9 PM");
 
   // TODO(api): "earning potential" is a local heuristic — replace with a real
   // estimate from the API (e.g. GET /api/host/earning-estimate?duration=...).
@@ -61,7 +55,7 @@ export default function CreateSessionPage() {
           <span className="axcess-step-number active">1</span>
           <div className="axcess-step-info">
             <span className="axcess-step-label active">Pre Setup</span>
-            <span className="axcess-step-sublabel active">Duration &amp; Time</span>
+            <span className="axcess-step-sublabel active">Duration</span>
           </div>
         </div>
         <div className="axcess-step-divider" />
@@ -135,48 +129,24 @@ export default function CreateSessionPage() {
             </div>
           </section>
 
-          {/* Start Time */}
+          {/* Go Live Now notice (replaces scheduled start-time picker) */}
           <section className="axcess-card">
-            <h2 className="axcess-card-title">Select a start time</h2>
-            <div className="axcess-time-grid">
-              {START_TIMES.map((t) => {
-                const isSelected = selectedTime === t;
-                return (
-                  <button
-                    key={t}
-                    onClick={() => setSelectedTime(t)}
-                    className={`axcess-time-btn ${isSelected ? "selected" : ""}`}
-                  >
-                    <span>{t}</span>
-                    {isSelected && <FaCheck className="axcess-time-check" />}
-                  </button>
-                );
-              })}
-            </div>
-            <p className="axcess-time-note">
-              <FaClock className="axcess-time-note-icon" />
-              This is the time when your session will go live for users in your time zone.
-            </p>
             <div className="axcess-important-card">
               <span className="axcess-important-badge">
-                <FaExclamation />
-                Important
+                <FaBroadcastTower />
+                Go Live Now
               </span>
               <div className="axcess-important-body">
                 <span className="axcess-important-icon-wrap">
-                  <FaClock className="axcess-important-icon" />
+                  <FaBroadcastTower className="axcess-important-icon" />
                 </span>
                 <div className="axcess-important-divider" />
                 <div className="axcess-important-text">
                   <h3 className="axcess-important-title">
-                    Post your link <span className="axcess-important-accent">1 hour</span> before{" "}
-                    <span className="axcess-important-accent">
-                      {selectedTime === "9 PM" ? "9 pm" : selectedTime.toLowerCase()}
-                    </span>{" "}
-                    live
+                    Your session goes live <span className="axcess-important-accent">as soon as you start it</span>
                   </h3>
                   <p className="axcess-important-desc">
-                    This gives your audience the right time to see your story, book their slot, and join your live.
+                    There's no need to schedule a time — set your duration, share your link on the next step, and go live whenever you're ready.
                   </p>
                 </div>
               </div>
@@ -204,10 +174,7 @@ export default function CreateSessionPage() {
                   </span>
                   <span className="axcess-overview-label">Go Live</span>
                 </div>
-                <div className="axcess-overview-value-wrap">
-                  <span className="axcess-overview-value">Today, {selectedTime}</span>
-                  <FaPencilAlt className="axcess-overview-edit-icon" />
-                </div>
+                <span className="axcess-overview-value">Now</span>
               </div>
               <div className="axcess-overview-row">
                 <div className="axcess-overview-left">
@@ -251,7 +218,7 @@ export default function CreateSessionPage() {
                 of relying solely on router state. */}
             <button
               className="axcess-cta-btn"
-              onClick={() => navigate("/host/prelive", { state: { duration: selectedDuration, time: selectedTime } })}
+              onClick={() => navigate("/host/prelive", { state: { duration: selectedDuration } })}
             >
               Pre Setup
               <FaArrowRight />
