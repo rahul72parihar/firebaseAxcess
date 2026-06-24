@@ -13,6 +13,7 @@ import {
   FaLink,
   FaRegCopy,
   FaTimes,
+  FaExclamation,
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
 import "./PreLiveSetupPage.css";
@@ -96,20 +97,28 @@ export default function PreLiveSetupPage() {
       <main className="pls-main">
         <div className="pls-content">
 
-          {/* Hero */}
-          <div className="pls-hero">
-            <div className="pls-hero-text">
-              <h1 className="pls-hero-title">Pre-Live Setup</h1>
-              <p className="pls-hero-subtitle">
-                You're almost live! Review your session details and get ready to go on air.
-              </p>
-            </div>
-            <div className="pls-hero-illustration">
-              <div className="pls-mic-circle">
-                <span className="pls-mic-emoji">🎙️</span>
-              </div>
-              <div className="pls-logo-badge">
-                <FaBroadcastTower />
+          {/* Important notice */}
+          <div className="pls-important-card">
+            <span className="pls-important-badge">
+              <FaExclamation />
+              Important
+            </span>
+            <div className="pls-important-body">
+              <span className="pls-important-icon-wrap">
+                <FaClock className="pls-important-icon" />
+              </span>
+              <div className="pls-important-divider" />
+              <div className="pls-important-text">
+                <h3 className="pls-important-title">
+                  Post your link <span className="pls-important-accent">1 hour</span> before{" "}
+                  <span className="pls-important-accent">
+                    {time === "9 PM" ? "9 pm" : time.toLowerCase()}
+                  </span>{" "}
+                  live
+                </h3>
+                <p className="pls-important-desc">
+                  This gives your audience the right time to see your story, book their slot, and join your live.
+                </p>
               </div>
             </div>
           </div>

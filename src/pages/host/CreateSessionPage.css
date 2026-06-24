@@ -345,45 +345,88 @@
   color: #9ca3af;
 }
 
-.axcess-recommend-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border-radius: 8px;
-  background: #eef2ff;
-  padding: 10px 12px;
+/* ===== Important notice card ===== */
+.axcess-important-card {
+  border-radius: 14px;
+  background: #f7f6fc;
+  padding: 14px;
 }
 
-.axcess-recommend-icon {
+.axcess-important-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e6e3fb;
+  color: #4338ca;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.axcess-important-badge svg {
+  height: 9px;
+  width: 9px;
+  background: #4338ca;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  box-sizing: content-box;
+}
+
+.axcess-important-body {
   display: flex;
-  height: 24px;
-  width: 24px;
+  align-items: center;
+  gap: 14px;
+}
+
+.axcess-important-icon-wrap {
+  display: flex;
+  height: 52px;
+  width: 52px;
+  min-width: 52px;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #4f46e5;
+  background: #eceaf9;
   flex-shrink: 0;
-  margin-top: 1px;
 }
 
-.axcess-recommend-icon svg {
-  height: 12px;
-  width: 12px;
-  color: #fff;
-}
-
-.axcess-recommend-title {
-  margin: 0 0 2px 0;
-  font-size: 13px;
-  font-weight: 700;
+.axcess-important-icon {
+  height: 26px;
+  width: 26px;
   color: #4338ca;
 }
 
-.axcess-recommend-text {
+.axcess-important-divider {
+  width: 1px;
+  align-self: stretch;
+  background: #ddd9f0;
+  flex-shrink: 0;
+}
+
+.axcess-important-text {
+  min-width: 0;
+}
+
+.axcess-important-title {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #111827;
+}
+
+.axcess-important-accent {
+  color: #4338ca;
+}
+
+.axcess-important-desc {
   margin: 0;
   font-size: 12px;
-  color: #4b5563;
-  line-height: 1.4;
+  color: #6b7280;
+  line-height: 1.5;
 }
 
 /* ===== Pre Setup Overview ===== */
@@ -592,6 +635,18 @@
 
 /* ===== Larger screens ===== */
 @media (min-width: 640px) {
+  .axcess-important-card {
+    padding: 20px;
+  }
+
+  .axcess-important-title {
+    font-size: 18px;
+  }
+
+  .axcess-important-desc {
+    font-size: 13px;
+  }
+
   .axcess-stepper {
     gap: 16px;
     padding: 12px 24px;

@@ -10,7 +10,7 @@ import {
   FaInfoCircle,
   FaShieldAlt,
   FaLightbulb,
-  FaStar,
+  FaExclamation,
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
 import "./CreateSessionPage.css";
@@ -41,9 +41,6 @@ const DURATIONS = [
 // TODO(api): fetch available slots from GET /api/host/availability — should
 // reflect the host's real calendar/timezone instead of this fixed list.
 const START_TIMES = ["7 PM", "8 PM", "9 PM", "10 PM"];
-// TODO(api): "recommended" slot should come from the API (e.g. based on
-// audience engagement analytics) rather than being hardcoded here.
-const RECOMMENDED_TIME = "9 PM";
 
 export default function CreateSessionPage() {
   const navigate = useNavigate();
@@ -160,19 +157,30 @@ export default function CreateSessionPage() {
               <FaClock className="axcess-time-note-icon" />
               This is the time when your session will go live for users in your time zone.
             </p>
-            {selectedTime === RECOMMENDED_TIME && (
-              <div className="axcess-recommend-banner">
-                <span className="axcess-recommend-icon">
-                  <FaStar />
+            <div className="axcess-important-card">
+              <span className="axcess-important-badge">
+                <FaExclamation />
+                Important
+              </span>
+              <div className="axcess-important-body">
+                <span className="axcess-important-icon-wrap">
+                  <FaClock className="axcess-important-icon" />
                 </span>
-                <div>
-                  <p className="axcess-recommend-title">Recommended: {RECOMMENDED_TIME}</p>
-                  <p className="axcess-recommend-text">
-                    This is a high engagement time for your audience and can help you get more bookings.
+                <div className="axcess-important-divider" />
+                <div className="axcess-important-text">
+                  <h3 className="axcess-important-title">
+                    Post your link <span className="axcess-important-accent">1 hour</span> before{" "}
+                    <span className="axcess-important-accent">
+                      {selectedTime === "9 PM" ? "9 pm" : selectedTime.toLowerCase()}
+                    </span>{" "}
+                    live
+                  </h3>
+                  <p className="axcess-important-desc">
+                    This gives your audience the right time to see your story, book their slot, and join your live.
                   </p>
                 </div>
               </div>
-            )}
+            </div>
           </section>
 
           {/* Pre Setup Overview */}
