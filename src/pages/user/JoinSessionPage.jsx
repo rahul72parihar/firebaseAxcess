@@ -15,13 +15,10 @@ export default function JoinSessionPage() {
   const navigate = useNavigate();
 
   const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(hostUid));
 
   useEffect(() => {
-    if (!hostUid) {
-      setLoading(false);
-      return;
-    }
+    if (!hostUid) return;
 
     const unsubscribe = onSnapshot(
       doc(db, "liveSessions", hostUid),
