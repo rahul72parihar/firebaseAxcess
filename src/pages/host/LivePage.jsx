@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, serverTimestamp, setDoc } from "firebase/firestore";
 
-import { joinVoiceChannel } from "../../services/agora";
+import { DEMO_CHANNEL, joinVoiceChannel } from "../../services/agora";
 import { db } from "../../firebase";
 
 // Reuses the same Header you already have. Adjust the relative path below
@@ -272,8 +272,8 @@ function BookedSlotsTable({ slots }) {
           <span className="ax-badge ax-badge--soft">{slots.length} Users</span>
         </div>
         <p className="ax-slots-subtitle">
-          Users will be called in this order. Users are alerted automatically
-          before their turn.
+          Sample data — booking/queue order isn't wired up yet, so this list
+          doesn't reflect who's actually on the call above.
         </p>
       </div>
 
@@ -438,15 +438,24 @@ export default function LivePage() {
 
   // TODO(api): channel naming is a placeholder until the booking/queue
   // backend assigns a real per-call channel and hands it to both the host
-  // (here) and the matched user (CallPage). For now every call on this
-  // host's "Go Live" session shares one channel keyed by the host's uid.
-  const channelName = hostUid ? `host-${hostUid}` : "demo-channel";
+  // (here) and the matched user (CallPage). Pinned to DEMO_CHANNEL for now
+  // because the temp Agora token (see services/agora.js) is only valid for
+  // that one channel name — once real per-call tokens exist, go back to a
+  // channel keyed by hostUid.
+  const liveSessionId = hostUid || "demo-host";
+  const channelName = DEMO_CHANNEL;
+
+  // Real connection state from Agora — null/empty until someone actually
+  // joins the channel. Replaces the old hardcoded "User 1 is on a call"
+  // mock, which used to show even when nobody was really connected.
+  const [remoteUsers, setRemoteUsers] = useState([]);
+  const [joinError, setJoinError] = useState("");
 
   useEffect(() => {
     let handle;
     let cancelled = false;
 
-    joinVoiceChannel({ channelName })
+    joinVoiceChannel({ channelName, onRemoteUsersChange: setRemoteUsers })
       .then((h) => {
         if (cancelled) {
           h.leave();
@@ -454,15 +463,35 @@ export default function LivePage() {
         }
         handle = h;
         callRef.current = h;
+
+        // Registers this host as live so QueuePage/JoinSessionPage can find
+        // the channel — written here (not just from PreLiveSetupPage) so
+        // direct/dev navigation to this page still makes calling possible.
+        setDoc(doc(db, "liveSessions", liveSessionId), {
+          hostUid: liveSessionId,
+          channelName,
+          status: "live",
+          startedAt: serverTimestamp(),
+        }).catch(console.error);
       })
-      .catch((err) => console.error("Failed to join Agora channel:", err));
+      .catch((err) => {
+        console.error("Failed to join Agora channel:", err);
+        setJoinError(
+          err?.message?.includes("PERMISSION_DENIED") || err?.name === "NotAllowedError"
+            ? "Microphone access was blocked — allow mic permission and reload."
+            : "Couldn't connect to the call. Check the console for details.",
+        );
+      });
 
     return () => {
       cancelled = true;
       handle?.leave().catch(console.error);
       callRef.current = null;
+      deleteDoc(doc(db, "liveSessions", liveSessionId)).catch(console.error);
     };
-  }, [channelName]);
+  }, [channelName, liveSessionId]);
+
+  const isConnected = remoteUsers.length > 0;
 
   // ---------------------------------------------------------------
   // MOCK STATE — everything below should eventually be replaced by
@@ -471,17 +500,27 @@ export default function LivePage() {
   // to swap data sources without touching the JSX below.
   // ---------------------------------------------------------------
 
-  // TODO: fetch current call from the active-session API / call socket
-  const [activeCall, setActiveCall] = useState({
-    userLabel: "U1",
-    userName: "User 1",
-    elapsed: "04:00",
-    duration: "05:00",
-    durationLabel: "5 min",
-    timeLeft: "01:00",
-    isMuted: false,
-    isSpeakerOn: true,
-  });
+  // Built from the real Agora connection (isConnected/remoteUsers above) —
+  // null whenever nobody has actually joined the call yet, rather than
+  // always showing a fake "User 1" as connected.
+  const [isMuted, setIsMuted] = useState(false);
+  const [isSpeakerOn, setIsSpeakerOn] = useState(true);
+
+  // TODO(api): elapsed/duration/timeLeft need a real call-start timestamp
+  // and the session's booked duration once that backend exists — for now
+  // we only show *that* someone is connected, not for how long.
+  const activeCall = isConnected
+    ? {
+        userLabel: "U",
+        userName: `Connected user${remoteUsers.length > 1 ? `s (${remoteUsers.length})` : ""}`,
+        elapsed: "--:--",
+        duration: "--:--",
+        durationLabel: "Live",
+        timeLeft: "--:--",
+        isMuted,
+        isSpeakerOn,
+      }
+    : null;
 
   // TODO: fetch from GET /api/sessions/:id/summary
   const [liveStats] = useState({
@@ -639,18 +678,14 @@ export default function LivePage() {
 
   const handleToggleMute = async () => {
     const muted = await callRef.current?.toggleMuted();
-    setActiveCall((prev) =>
-      prev ? { ...prev, isMuted: muted ?? !prev.isMuted } : prev,
-    );
+    setIsMuted(muted ?? !isMuted);
   };
 
   const handleToggleSpeaker = () => {
     // Speaker output (vs. earpiece) isn't controllable from the Web Audio
     // API — this stays a UI-only toggle on web; remote audio always plays
     // through the default output device.
-    setActiveCall((prev) =>
-      prev ? { ...prev, isSpeakerOn: !prev.isSpeakerOn } : prev,
-    );
+    setIsSpeakerOn((prev) => !prev);
   };
 
   const handleEndCall = () => {
@@ -661,14 +696,10 @@ export default function LivePage() {
     // TODO(api): call POST /api/sessions/:id/end to finalize the session on
     // the backend (total calls, earnings) before navigating — SessionEndedPage
     // currently expects that summary data to already exist server-side.
-    await callRef.current?.leave();
-    callRef.current = null;
+    // Leaving the Agora channel and clearing the liveSessions doc happens in
+    // this effect's cleanup (see useEffect above) when this page unmounts
+    // on navigate, so it isn't duplicated here.
 
-    if (hostUid) {
-      await deleteDoc(doc(db, "liveSessions", hostUid)).catch(console.error);
-    }
-
-    setActiveCall(null);
     setShowEndCallModal(false);
     navigate("/host/session-ended");
   };
@@ -686,6 +717,18 @@ export default function LivePage() {
       <Header mode="create" loggedIn userName="Aisha" />
 
       <main className="ax-live-content">
+        {joinError && (
+          <div className="ax-card" style={{ color: "#b00020", fontWeight: 600 }}>
+            {joinError}
+          </div>
+        )}
+
+        {!joinError && !isConnected && (
+          <div className="ax-card" style={{ textAlign: "center" }}>
+            You're live — waiting for someone to join via your session link.
+          </div>
+        )}
+
         <ActiveCallBar
           call={activeCall}
           onToggleMute={handleToggleMute}

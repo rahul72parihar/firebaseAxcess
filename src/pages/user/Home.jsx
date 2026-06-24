@@ -189,15 +189,16 @@ export default function Home() {
             ))}
           </div>
 
-          {/* TODO(api): wire to payment gateway (e.g. POST /api/payments/create-order),
-              then on success call POST /api/queue/join before navigating to /queue. */}
+          {/* TODO(api): payments are disabled for now — once re-enabled, wire to a
+              payment gateway (e.g. POST /api/payments/create-order), then on
+              success call POST /api/queue/join before navigating to /queue. */}
           <button className="pay-btn" onClick={() => navigate("/queue")}>
-            Pay ₹{selectedPlan.price} & Join Queue
+            Join Queue — Free for now
           </button>
 
           <div className="payment-note">
             <TbLock size={18} />
-            Secure & Encrypted Payments
+            No payment required while we're in testing
           </div>
 
           {/* Queue */}

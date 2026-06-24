@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
 import { db } from "../../firebase";
+import { DEMO_CHANNEL } from "../../services/agora";
 import "./PreLiveSetupPage.css";
 
 const GO_LIVE_COUNTDOWN_SECONDS = 5;
@@ -62,12 +63,13 @@ export default function PreLiveSetupPage() {
     clearInterval(intervalRef.current);
 
     // Marks this host's channel as live so QueuePage can discover it and
-    // route users into the same Agora channel for the call.
+    // route users into the same Agora channel for the call. Pinned to
+    // DEMO_CHANNEL — see services/agora.js for why (temp token is
+    // channel-specific). LivePage re-writes this doc on mount too.
     if (hostUid) {
-      const channelName = `host-${hostUid}`;
       await setDoc(doc(db, "liveSessions", hostUid), {
         hostUid,
-        channelName,
+        channelName: DEMO_CHANNEL,
         duration,
         status: "live",
         startedAt: serverTimestamp(),

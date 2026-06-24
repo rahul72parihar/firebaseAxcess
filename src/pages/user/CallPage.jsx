@@ -9,8 +9,10 @@ import { TbPhoneOff, TbMicrophone, TbVolume } from "react-icons/tb";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { collection, doc, getDoc, limit, onSnapshot, query, where } from "firebase/firestore";
 
 import { joinVoiceChannel } from "../../services/agora";
+import { db } from "../../firebase";
 
 export default function Callpage() {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export default function Callpage() {
   const [isMuted, setIsMuted] = useState(false);
   const [showEndCallModal, setShowEndCallModal] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
+  const [hostName, setHostName] = useState(null);
   // const [infoMessage, setInfoMessage] = useState(true);
 
   // TODO(api): channel comes from the booking/queue match once that backend
@@ -27,6 +30,34 @@ export default function Callpage() {
   // links the user here) so a host's LivePage and this page can share a
   // real Agora channel for manual testing.
   const channelName = searchParams.get("channel") || "demo-channel";
+
+  // Looks up whichever host is actually live right now and pulls their
+  // real name from Firestore, instead of showing a hardcoded "Aisha".
+  useEffect(() => {
+    const liveQuery = query(
+      collection(db, "liveSessions"),
+      where("status", "==", "live"),
+      limit(1),
+    );
+
+    const unsubscribe = onSnapshot(liveQuery, async (snap) => {
+      const liveDoc = snap.docs[0]?.data();
+      if (!liveDoc?.hostUid) {
+        setHostName(null);
+        return;
+      }
+
+      try {
+        const hostSnap = await getDoc(doc(db, "hosts", liveDoc.hostUid));
+        setHostName(hostSnap.exists() ? hostSnap.data().name || "Host" : "Host");
+      } catch (err) {
+        console.error("Failed to load host profile:", err);
+        setHostName("Host");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     let handle;
@@ -120,16 +151,13 @@ export default function Callpage() {
               LIVE
             </div> */}
             <div className="avatar-ring">
-              <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80"
-                alt="Aisha"
-                className="avatar-img"
-                id="avatarImg"
-              />
+              <span className="avatar-fallback">
+                {(hostName || "H").charAt(0).toUpperCase()}
+              </span>
             </div>
 
             <h3>
-              Aisha
+              {hostName || "Connecting..."}
               <RiVerifiedBadgeFill
                 size={22}
                 className="verified"
@@ -137,7 +165,7 @@ export default function Callpage() {
               />
             </h3>
 
-            <p>8.7K followers</p>
+            <p>1-on-1 Audio Call</p>
           </div>
 
           <div className="wave wave-right"></div>
