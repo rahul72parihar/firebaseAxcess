@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { joinVoiceChannel } from "../../services/agora";
 
 // Reuses the same Header you already have. Adjust the relative path below
 // if LivePage.jsx ends up in a different folder than this assumes
@@ -427,6 +430,37 @@ function SessionOverviewFooter({ overview, elapsedTime, totalDuration }) {
 
 export default function LivePage() {
   const navigate = useNavigate();
+  const hostUid = useSelector((s) => s.auth.uid);
+  const callRef = useRef(null);
+
+  // TODO(api): channel naming is a placeholder until the booking/queue
+  // backend assigns a real per-call channel and hands it to both the host
+  // (here) and the matched user (CallPage). For now every call on this
+  // host's "Go Live" session shares one channel keyed by the host's uid.
+  const channelName = hostUid ? `host-${hostUid}` : "demo-channel";
+
+  useEffect(() => {
+    let handle;
+    let cancelled = false;
+
+    joinVoiceChannel({ channelName })
+      .then((h) => {
+        if (cancelled) {
+          h.leave();
+          return;
+        }
+        handle = h;
+        callRef.current = h;
+      })
+      .catch((err) => console.error("Failed to join Agora channel:", err));
+
+    return () => {
+      cancelled = true;
+      handle?.leave().catch(console.error);
+      callRef.current = null;
+    };
+  }, [channelName]);
+
   // ---------------------------------------------------------------
   // MOCK STATE — everything below should eventually be replaced by
   // real data (initial fetch + live updates via polling/websocket).
@@ -600,15 +634,17 @@ export default function LivePage() {
   // Handlers — wire these up to the real call/session API
   // ---------------------------------------------------------------
 
-  const handleToggleMute = () => {
-    // TODO: call WebRTC/audio SDK mute toggle here
+  const handleToggleMute = async () => {
+    const muted = await callRef.current?.toggleMuted();
     setActiveCall((prev) =>
-      prev ? { ...prev, isMuted: !prev.isMuted } : prev,
+      prev ? { ...prev, isMuted: muted ?? !prev.isMuted } : prev,
     );
   };
 
   const handleToggleSpeaker = () => {
-    // TODO: call WebRTC/audio SDK speaker toggle here
+    // Speaker output (vs. earpiece) isn't controllable from the Web Audio
+    // API — this stays a UI-only toggle on web; remote audio always plays
+    // through the default output device.
     setActiveCall((prev) =>
       prev ? { ...prev, isSpeakerOn: !prev.isSpeakerOn } : prev,
     );
@@ -618,10 +654,12 @@ export default function LivePage() {
     setShowEndCallModal(true);
   };
 
-  const confirmEndCall = () => {
+  const confirmEndCall = async () => {
     // TODO(api): call POST /api/sessions/:id/end to finalize the session on
     // the backend (total calls, earnings) before navigating — SessionEndedPage
     // currently expects that summary data to already exist server-side.
+    await callRef.current?.leave();
+    callRef.current = null;
     setActiveCall(null);
     setShowEndCallModal(false);
     navigate("/host/session-ended");

@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import {
   FaUserFriends,
   FaPhone,
@@ -11,19 +14,28 @@ import {
   FaHome,
 } from "react-icons/fa";
 import Header from "../../components/Header.jsx";
+import { db, auth } from "../../firebase";
 import "./HostDashboardPage.css";
 
-// TODO(api): fetch from GET /api/host/stats — replace hardcoded value strings
-// with real all-time totals (Total Booked, Total Calls, Total Live Time, Total Earnings).
-const STATS = [
-  { icon: FaUserFriends, color: "purple", value: "18", label: "Total Booked" },
-  { icon: FaPhone, color: "green", value: "128", label: "Total Calls" },
-  { icon: FaClock, color: "orange", value: "32.4 hrs", label: "Total Live Time" },
-  { icon: FaRupeeSign, color: "purple", value: "₹8,420", label: "Total Earnings" },
+const STAT_DEFS = [
+  { key: "totalBooked", icon: FaUserFriends, color: "purple", label: "Total Booked", format: (v) => `${v ?? 0}` },
+  { key: "totalCalls", icon: FaPhone, color: "green", label: "Total Calls", format: (v) => `${v ?? 0}` },
+  {
+    key: "totalLiveMinutes",
+    icon: FaClock,
+    color: "orange",
+    label: "Total Live Time",
+    format: (v) => `${((v ?? 0) / 60).toFixed(1)} hrs`,
+  },
+  {
+    key: "totalEarnings",
+    icon: FaRupeeSign,
+    color: "purple",
+    label: "Total Earnings",
+    format: (v) => `₹${(v ?? 0).toLocaleString("en-IN")}`,
+  },
 ];
 
-// TODO(api): tips could eventually be served/personalized from the backend
-// (e.g. GET /api/host/tips) rather than being static copy.
 const TIPS = [
   {
     icon: FaUserFriends,
@@ -45,11 +57,52 @@ const TIPS = [
   },
 ];
 
+const EMPTY_STATS = {
+  totalBooked: 0,
+  totalCalls: 0,
+  totalLiveMinutes: 0,
+  totalEarnings: 0,
+};
+
 export default function HostDashboardPage() {
   const navigate = useNavigate();
+  const uid = useSelector((s) => s.auth.uid);
 
-  // TODO(api): "Rohan" is hardcoded — pull the logged-in host's name/profile
-  // from the auth store or GET /api/host/profile (see useSelector usage in Header.jsx).
+  const [hostData, setHostData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!uid) {
+      setLoading(false);
+      return;
+    }
+
+    const hostRef = doc(db, "hosts", uid);
+
+    const unsubscribe = onSnapshot(
+      hostRef,
+      (snap) => {
+        if (snap.exists()) {
+          setHostData(snap.data());
+        } else {
+          const fallbackName = auth.currentUser?.displayName || "Host";
+          const initialDoc = { name: fallbackName, ...EMPTY_STATS };
+          setDoc(hostRef, initialDoc, { merge: true }).catch(console.error);
+          setHostData(initialDoc);
+        }
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        setLoading(false);
+      },
+    );
+
+    return () => unsubscribe();
+  }, [uid]);
+
+  const stats = hostData ?? EMPTY_STATS;
+  const hostName = hostData?.name || auth.currentUser?.displayName || "Host";
 
   return (
     <div className="hd-page">
@@ -59,22 +112,24 @@ export default function HostDashboardPage() {
         <div className="hd-content">
 
           <div className="hd-welcome">
-            <h1 className="hd-title">Welcome back, Rohan! 👋</h1>
+            <h1 className="hd-title">Welcome back, {hostName}! 👋</h1>
             <p className="hd-subtitle">Go live, connect and grow with your audience.</p>
           </div>
 
           {/* Stats */}
           <section className="hd-card hd-stats-card">
             <div className="hd-stats-grid">
-              {STATS.map((s, i) => {
+              {STAT_DEFS.map((s, i) => {
                 const Icon = s.icon;
                 return (
-                  <div className="hd-stat" key={s.label}>
+                  <div className="hd-stat" key={s.key}>
                     {i > 0 && <span className="hd-stat-divider" />}
                     <span className={`hd-stat-icon-wrap ${s.color}`}>
                       <Icon />
                     </span>
-                    <span className="hd-stat-value">{s.value}</span>
+                    <span className="hd-stat-value">
+                      {loading ? "…" : s.format(stats[s.key])}
+                    </span>
                     <span className="hd-stat-label">{s.label}</span>
                     <span className="hd-stat-sub">All time</span>
                   </div>
@@ -134,9 +189,6 @@ export default function HostDashboardPage() {
       </main>
 
       {/* Bottom nav */}
-      {/* TODO(api): "Earnings" tab has no destination yet — link it once an
-          earnings/payout history page exists (e.g. /host/earnings backed by
-          GET /api/host/payouts). */}
       <footer className="hd-bottom-nav">
         <button className="hd-nav-item active">
           <FaHome />

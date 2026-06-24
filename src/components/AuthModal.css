@@ -40,26 +40,41 @@
   font-size: 1.1rem;
 }
 
-.auth-toggle{
+.auth-method-toggle{
   display:flex;
-  gap: 10px;
-  padding: 12px 18px 0 18px;
+  gap: 4px;
+  margin: 16px 18px 0 18px;
+  padding: 4px;
+  background:#f3f1fb;
+  border-radius: 14px;
 }
 
-.auth-toggle button{
+.auth-method-btn{
   flex:1;
-  border: 1px solid #eee;
-  background:#fff;
+  border: none;
+  background: transparent;
+  color:#666;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 11px;
   font-weight: 700;
+  font-size: 0.9rem;
   cursor:pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.auth-toggle button.active{
-  border-color: #4b30e3;
-  background: #f8f5ff;
+.auth-method-btn:hover:not(.active):not(:disabled){
   color:#4b30e3;
+}
+
+.auth-method-btn.active{
+  background:#fff;
+  color:#4b30e3;
+  box-shadow: 0 2px 8px rgba(75,48,227,0.18);
+}
+
+.auth-method-btn:disabled{
+  cursor:not-allowed;
+  opacity: 0.7;
 }
 
 .auth-form{

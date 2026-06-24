@@ -7,22 +7,49 @@ import { MdSecurity } from "react-icons/md";
 import { BsExclamationTriangle } from "react-icons/bs";
 import { TbPhoneOff, TbMicrophone, TbVolume } from "react-icons/tb";
 
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+
+import { joinVoiceChannel } from "../../services/agora";
 
 export default function Callpage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const callRef = useRef(null);
+
   const [isMuted, setIsMuted] = useState(false);
   const [showEndCallModal, setShowEndCallModal] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   // const [infoMessage, setInfoMessage] = useState(true);
 
-  // TODO(api): connect to the WebRTC/calling SDK (e.g. join room via
-  // POST /api/calls/:id/join) and drive call state (host info, timer,
-  // mute/speaker, duration) from that connection instead of the static
-  // markup below.
-  // TODO(api): isMuted/isSpeakerOn toggles below currently only flip local
-  // UI state — wire them to the actual audio SDK mute/speaker controls.
+  // TODO(api): channel comes from the booking/queue match once that backend
+  // exists — for now it's read from ?channel=host-<hostUid> (set by whatever
+  // links the user here) so a host's LivePage and this page can share a
+  // real Agora channel for manual testing.
+  const channelName = searchParams.get("channel") || "demo-channel";
+
+  useEffect(() => {
+    let handle;
+    let cancelled = false;
+
+    joinVoiceChannel({ channelName })
+      .then((h) => {
+        if (cancelled) {
+          h.leave();
+          return;
+        }
+        handle = h;
+        callRef.current = h;
+      })
+      .catch((err) => console.error("Failed to join Agora channel:", err));
+
+    return () => {
+      cancelled = true;
+      handle?.leave().catch(console.error);
+      callRef.current = null;
+    };
+  }, [channelName]);
+
   // TODO(api): "Time Left" / "Call Duration" / progress bar are hardcoded
   // — drive from the call's real elapsed/remaining time (server clock or
   // local timer synced with session start time from the API).
@@ -121,7 +148,10 @@ export default function Callpage() {
           <div className="control">
             <button
               className={`circle-btn ${isMuted ? "active-control" : ""}`}
-              onClick={() => setIsMuted(!isMuted)}
+              onClick={async () => {
+                const muted = await callRef.current?.toggleMuted();
+                setIsMuted(muted ?? !isMuted);
+              }}
             >
               <TbMicrophone size={26} />
             </button>
@@ -204,7 +234,11 @@ export default function Callpage() {
                   so the backend can finalize duration/billing for this call. */}
               <button
                 className="modal-btn confirm"
-                onClick={() => navigate("/")}
+                onClick={async () => {
+                  await callRef.current?.leave();
+                  callRef.current = null;
+                  navigate("/");
+                }}
               >
                 End Call
               </button>
